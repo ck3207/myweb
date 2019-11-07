@@ -1,9 +1,5 @@
 from django.shortcuts import render
-import os
-import django
-os.environ.update({"DJANGO_SETTINGS_MODULE": "myweb.settings"})
-django.setup()
-from models import LableNum, LableDetail
+from .models import LableNum, LableDetail
 # Create your views here.
 
 def homepage(request):
@@ -19,6 +15,15 @@ def get_labels(request):
 
 
 def get_lable_detail(request, lable_name='acct_wt_user_fund_income_value'):
-    detail = LableDetail.objects.get(lable_name)
-    return render(request, 'lable_detail.html', {'detail': detail})
+    detail = LableDetail.objects.filter(table_name=lable_name)
+    return render(request, 'lable_detail.html', locals())
 
+
+def get_detail(request):
+    table_name = "acct_wt_user_fund_income_value"
+    details = []
+    detail = LableDetail.objects.filter(table_name=table_name).order_by("column_name", "-value_type", "interval_type")
+    num = 1234567
+    value_type_1 = range(4)
+    value_type_0 = range(7)
+    return render(request, 'detail.html', locals())

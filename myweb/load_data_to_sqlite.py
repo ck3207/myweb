@@ -37,14 +37,14 @@ def load_data_to_sqlite(file_name="data.pkl"):
     with open(file=file_name, mode="rb") as f:
         data = pickle.load(f)
 
-
     LableNum.objects.all().delete()
+    LableDetail.objects.all().delete()
     for table_name, info in data.items():
         LableNum.objects.create(table_name=table_name, table_num=info.get("num"))
         for column, column_info in info.items():
             if not column == "num":
                 # value_type=0, null值; value_type=1, 最小值; value_type=2,最大值
-                for value_type in range(3):
+                for value_type in [0, 1, 2]:
                     if value_type == 0:
                         value_type_d = "null"
                     elif value_type == 1:
@@ -52,19 +52,32 @@ def load_data_to_sqlite(file_name="data.pkl"):
                     else:
                         value_type_d = "max"
                     for each in column_info.get(value_type_d):
-                        for detail in each:
-                            if len(detail) > 0:
-                                fund_account = each[0]
-                                value = each[1]
-                                interval_type = each[2]
-                                LableDetail.objects.create(table_name=table_name,
-                                                           column_name=column,
-                                                           fund_account=fund_account,
-                                                           value=value,
-                                                           value_type=value_type,
-                                                           interval_type=interval_type)
-                                print(table_name, column, value_type, interval_type)
-
+                        if len(each) > 0:
+                            fund_account = each[0]
+                            value = each[1]
+                            interval_type = each[2]
+                            LableDetail.objects.create(table_name=table_name,
+                                                       column_name=column,
+                                                       fund_account=fund_account,
+                                                       value=value,
+                                                       value_type=value_type,
+                                                       interval_type=interval_type)
+                            print(table_name, column, value_type, interval_type, value)
+                # 当没有最大值、最小值、NULL值的数据时，插入一条数据缺失的数据
+                for tmp in range(3):
+                    l = LableDetail.objects.filter(table_name=table_name,
+                                               column_name=column,
+                                               value_type=tmp)
+                    try:
+                        l[0]
+                    except Exception:
+                        LableDetail.objects.create(table_name=table_name,
+                                                   column_name=column,
+                                                   fund_account='--',
+                                                   value='--',
+                                                   value_type=tmp,
+                                                   interval_type="--")
+                        print(table_name, column, tmp, "--", "--")
 
 
 if __name__ == "__main__":

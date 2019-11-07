@@ -17,9 +17,10 @@ class LableDetail(models.Model):
     table_name = models.CharField(max_length=128)
     column_name = models.CharField(max_length=64, default='')
     fund_account = models.CharField(max_length=16)
-    value = models.CharField(max_length=512)
-    value_type = models.IntegerField()
     interval_type = models.CharField(max_length=4)
+    max_value = models.CharField(max_length=512)
+    min_value = models.CharField(max_length=512)
+    null_value = models.CharField(max_length=512)
 
     def __unicode__(self):
         return self.table_name
