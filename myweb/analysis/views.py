@@ -22,8 +22,7 @@ def get_lable_detail(request, lable_name='acct_wt_user_fund_income_value'):
 def get_detail(request):
     table_name = "acct_wt_user_fund_income_value"
     details = []
-    detail = LableDetail.objects.filter(table_name=table_name).order_by("column_name", "-value_type", "interval_type")
-    num = 1234567
-    value_type_1 = range(4)
-    value_type_0 = range(7)
+    detail = LableDetail.objects.filter(table_name=table_name).order_by("column_name", "interval_type")
+    label_num = LableNum.objects.filter(table_name=table_name)
+
     return render(request, 'detail.html', locals())

@@ -7,7 +7,7 @@
 <>
 <h2>标签详情</h2>
 <table width="1000" border="1">
-    <tr><th>表名</th><td>{{table_name}}</td><th>表数据量</th><td>{{num}}</td></tr>
+    <p>表名: {{table_name}}       表数据量:   {{label_num.table_num}}</p>
     <tr>
         <th>字段名</th>
         <th>资金账号</th>
@@ -22,22 +22,20 @@
     <h1>{{ detail.0 }}</h1>
     {% for column_detail in detail %}
             <!-- max_value -->
-            {% if column_detail.value_type == 2 %}
-                <tr>
-                <td>{{column_detail.column_name}}</td>
-                <td>{{column_detail.fund_account}}</td>
-                <td>{{column_detail.value}}</td>
-                <td>{{column_detail.interval_type}}</td>
-                <!-- min_value -->
-            {% elif column_detail.value_type == 1 %}
-                <td>{{column_detail.fund_account}}</td>
-                <td>{{column_detail.value}}</td>
-                <td>{{column_detail.interval_type}}</td>
-                <!-- null_value -->
-            {% else %}
-                <td>{{column_detail.value}}</td>
-                </tr>
-            {% endif %}
+        <tr>
+            <td align="right">{{column_detail.column_name}}</td>
+            <td align="right">{{column_detail.fund_account_max}}</td>
+            <td align="right">{{column_detail.max_value}}</td>
+            <td align="right">{{column_detail.interval_type}}</td>
+            <!-- min_value -->
+            <td align="right">{{column_detail.fund_account_min}}</td>
+            <td align="right">{{column_detail.min_value}}</td>
+            <td align="right">{{column_detail.interval_type}}</td>
+            <!-- null_value -->
+            <td align="right">{{column_detail.null_value}}</td>
+            <!-- remark -->
+            <td align="right"></td>
+        </tr>
     {% endfor %}
 </table>
 </body>

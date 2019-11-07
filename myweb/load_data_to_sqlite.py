@@ -43,41 +43,47 @@ def load_data_to_sqlite(file_name="data.pkl"):
         LableNum.objects.create(table_name=table_name, table_num=info.get("num"))
         for column, column_info in info.items():
             if not column == "num":
-                # value_type=0, null值; value_type=1, 最小值; value_type=2,最大值
-                for value_type in [0, 1, 2]:
-                    if value_type == 0:
-                        value_type_d = "null"
-                    elif value_type == 1:
-                        value_type_d = "min"
+                # 初始化字段值
+                fund_account_max, fund_account_min, interval_type = "--", "--", "--"
+                max_value, min_value, null_value = "--", "--", "--"
+
+                max_values = column_info.get("max")
+                min_values = column_info.get("min")
+
+                # 同一字段 如果有最大值，那么就有最小值，但是有可能不是每个interval_type都有数据
+                for i in range(len(max_values)):
+                    # 初始化字段值
+                    fund_account_max, fund_account_min, interval_type = "--", "--", "--"
+                    max_value, min_value, null_value = "--", "--", "--"
+                    if max_values[i][2] < min_values[i][2]:
+                        interval_type = max_values[i][2]
+                        fund_account_max = max_values[i][0]
+                        max_value = max_values[i][1]
+                    elif max_values[i][2] > min_values[i][2]:
+                        interval_type = min_values[i][2]
+                        fund_account_min = min_values[i][0]
+                        min_value = min_values[i][1]
                     else:
-                        value_type_d = "max"
-                    for each in column_info.get(value_type_d):
-                        if len(each) > 0:
-                            fund_account = each[0]
-                            value = each[1]
-                            interval_type = each[2]
-                            LableDetail.objects.create(table_name=table_name,
-                                                       column_name=column,
-                                                       fund_account=fund_account,
-                                                       value=value,
-                                                       value_type=value_type,
-                                                       interval_type=interval_type)
-                            print(table_name, column, value_type, interval_type, value)
-                # 当没有最大值、最小值、NULL值的数据时，插入一条数据缺失的数据
-                for tmp in range(3):
-                    l = LableDetail.objects.filter(table_name=table_name,
-                                               column_name=column,
-                                               value_type=tmp)
+                        fund_account_max = max_values[i][0]
+                        max_value = max_values[i][1]
+                        fund_account_min = min_values[i][0]
+                        min_value = min_values[i][1]
+                        interval_type = max_values[i][2]
+                    null_values = column_info.get("null", '')
                     try:
-                        l[0]
-                    except Exception:
-                        LableDetail.objects.create(table_name=table_name,
-                                                   column_name=column,
-                                                   fund_account='--',
-                                                   value='--',
-                                                   value_type=tmp,
-                                                   interval_type="--")
-                        print(table_name, column, tmp, "--", "--")
+                        null_value = null_values[i]
+                    except IndexError:
+                        pass
+                    #  插入数据
+                    LableDetail.objects.create(table_name=table_name,
+                                               column_name=column,
+                                               interval_type=interval_type,
+                                               fund_account_max=fund_account_max,
+                                               max_value=max_value,
+                                               fund_account_min=fund_account_min,
+                                               min_value=min_value,
+                                               null_value=null_value)
+                    print(table_name, column, interval_type, max_value, min_value, null_value)
 
 
 if __name__ == "__main__":
