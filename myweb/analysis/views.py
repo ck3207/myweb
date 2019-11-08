@@ -23,6 +23,6 @@ def get_detail(request):
     table_name = "acct_wt_user_fund_income_value"
     details = []
     detail = LableDetail.objects.filter(table_name=table_name).order_by("column_name", "interval_type")
-    label_num = LableNum.objects.filter(table_name=table_name)
+    label_num = LableNum.objects.get(table_name=table_name)
 
     return render(request, 'detail.html', locals())

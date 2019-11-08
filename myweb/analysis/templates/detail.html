@@ -7,7 +7,7 @@
 <>
 <h2>标签详情</h2>
 <table width="1000" border="1">
-    <p>表名: {{table_name}}       表数据量:   {{label_num.table_num}}</p>
+    <b>表名: {{table_name}}       表数据量:   {{label_num.table_num}}</b>
     <tr>
         <th>字段名</th>
         <th>资金账号</th>
@@ -19,20 +19,19 @@
         <th>NULL值</th>
         <th>备注</th>
     </tr>
-    <h1>{{ detail.0 }}</h1>
     {% for column_detail in detail %}
             <!-- max_value -->
         <tr>
             <td align="right">{{column_detail.column_name}}</td>
             <td align="right">{{column_detail.fund_account_max}}</td>
-            <td align="right">{{column_detail.max_value}}</td>
+            <td align="right">{{column_detail.max_value | truncatechars:32}}</td>
             <td align="right">{{column_detail.interval_type}}</td>
             <!-- min_value -->
-            <td align="right">{{column_detail.fund_account_min}}</td>
+            <td align="right">{{column_detail.fund_account_min | truncatechars:32}}</td>
             <td align="right">{{column_detail.min_value}}</td>
             <td align="right">{{column_detail.interval_type}}</td>
             <!-- null_value -->
-            <td align="right">{{column_detail.null_value}}</td>
+            <td align="right">{{column_detail.null_value | truncatechars:32}}</td>
             <!-- remark -->
             <td align="right"></td>
         </tr>
