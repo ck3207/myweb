@@ -3,15 +3,15 @@ from .models import LableNum, LableDetail
 # Create your views here.
 
 def homepage(request):
-    return render(request, 'home.html')
+    all_tables = LableNum.objects.all()
+    tables_num = len(all_tables)
+    return render(request, 'home.html', locals())
 
 
 def get_labels(request):
-    lables = []
-    for i in range(10):
-        lable = "标签" + str(i)
-        lables.append(lable)
-    return render(request, 'lable.html', {'lables': lables})
+    all_tables = LableNum.objects.all()
+    tables_num = len(all_tables)
+    return render(request, 'lable.html', locals())
 
 
 def get_lable_detail(request, lable_name='acct_wt_user_fund_income_value'):
@@ -19,9 +19,7 @@ def get_lable_detail(request, lable_name='acct_wt_user_fund_income_value'):
     return render(request, 'lable_detail.html', locals())
 
 
-def get_detail(request):
-    table_name = "acct_wt_user_fund_income_value"
-    details = []
+def get_detail(request, table_name="acct_wt_user_money_in_out"):
     detail = LableDetail.objects.filter(table_name=table_name).order_by("column_name", "interval_type")
     label_num = LableNum.objects.get(table_name=table_name)
 

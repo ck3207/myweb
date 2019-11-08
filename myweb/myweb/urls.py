@@ -21,7 +21,7 @@ from analysis import views as v
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', v.homepage, name='homepage'),
-    re_path('^lable/$', v.get_labels, name='lable'),
+    re_path('^label/$', v.get_labels, name='lable'),
     path('lable/detail/', v.get_lable_detail, name='lable_detail'),
-    path('detail/', v.get_detail, name='detail'),
+    path('detail/<str:table_name>', v.get_detail, name='detail'),
 ]

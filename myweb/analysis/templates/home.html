@@ -2,36 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>数据统计</title>
+    <title>标签数据统计</title>
 </head>
 <body>
-		<h1>标签数据统计结果报表</h1><hr>标签总个数:<br>
-		<p>标签列表：</p>
-		<ol>
-			<li>标签1</li>
-			<li>标签2</li>
-			<li>标签3</li>
-			<li>标签4</li>
-		</ol>
+        <!--{{all_tables}}-->
+		<h1>标签数据统计结果报表</h1>
+		<h2>标签总个数:{{tables_num}}</h2>
+		<table width=500 border=2 color='black'>
 
-		<h2>Lables Detail</h2>
-		<table width=800 border=2 color='black'>
             <tr>
-                <th>表名</th><td align="right">table_name</td>
-                <th>表数据量</th><td align="right">10000</td>
+                <th>表名</th>
+                <th>表数据量</th>
+                <th>备注</th>
             </tr>
+            {% for table in all_tables %}
             <tr>
-                <th>字段名</th>
-                <th>资金账号</th>
-                <th>极大值</th>
-                <th>时间维度</th>
+                <td align="left">{{table.table_name}}</td>
+                <td align="right">{{table.table_num}}</td>
+                <td><a href="detail/{{table.table_name}}" align="center">标签详情</a></td>
             </tr>
-            <tr>
-                <td align="right">column</td>
-                <td align="right">fund_account</td>
-                <td align="right">max_value</td>
-                <td align="right">近一月</td>
-            </tr>
+            {% endfor %}
 		</table>
 
 </body>
