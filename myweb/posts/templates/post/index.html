@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form name="my form" action="/" method="get" >
+    现在的心情：<br/>
+    {% for mood in moods %}
+    <input type="radio" name="mood" value="{{mood.mood}}">{{mood.mood}}
+    {% endfor %}
+    <br/>
+    心情留言板：<br/>
+    <textarea name="content" row="5" cols="50"></textarea>
+    <br/>
+    <label for="user_id">你的昵称</label>
+    <input id="nickname" type="text" name="nickname">
+
+    <label for="user_id">张贴密码</label>
+    <input id="user_pass" type="password" name="user_pass">
+
+    <input type="submit" value="张贴">
+    <input type="reset" value="清除重置">
+
+
+</form>
+</body>
+</html>

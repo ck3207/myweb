@@ -17,10 +17,12 @@ from django.contrib import admin
 from django.urls import path, re_path
 from django.conf.urls import url
 from analysis import views as v
+from posts import views as vp
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', v.homepage, name='homepage'),
+    path('homepage/', v.homepage, name='homepage'),
+    path('', vp.index),
     re_path('^label/$', v.get_labels, name='lable'),
     path('lable/detail/', v.get_lable_detail, name='lable_detail'),
     path('detail/<str:table_name>', v.get_detail, name='detail'),
