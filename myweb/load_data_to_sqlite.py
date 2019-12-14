@@ -6,10 +6,11 @@ os.environ.update({"DJANGO_SETTINGS_MODULE": "myweb.settings"})
 django.setup()
 
 from analysis.models import LableNum, LableDetail
+from analysis.models import Tools
 __author__ = "chenk"
 
 
-def load_data_to_sqlite(file_name="data.pkl"):
+def load_data_to_sqlite_of_labels(file_name="data.pkl"):
     """从文件中导入数据，文件存储数据格式为：
     "table_name"：
     {'income_value': 
@@ -86,6 +87,20 @@ def load_data_to_sqlite(file_name="data.pkl"):
                     print(table_name, column, interval_type, max_value, min_value, null_value)
 
 
+def load_data_to_sqlite_of_tools():
+    tools = {"标签数据统计": ["可查阅所有统计标签，列出标签的一些基本信息；\
+    比如 某一计算日的标签总数量，标签每个维度的极值，标签每个维度的空值情况；", "/labels"],
+             "正交表转化": ["通过正交表查询网站(http://support.sas.com/techsup/technote/ts723_Designs.txt)，\
+              找到符合的正交表，然后设置正交表的有效列，以及实际填充值，\
+              最终生成一个可直接复制到excel的正交表；", "/orthogonalArray"]}
+    Tools.objects.all().delete()
+    for name, values in tools.items():
+        Tools.objects.create(name=name, summary=values[0], url=values[1])
+
+    return
+
+
 if __name__ == "__main__":
     # os.environ.update({"DJANGO_SETTINGS_MODULE": "config.settings"})
-    load_data_to_sqlite()
+    # load_data_to_sqlite_of_labels()
+    load_data_to_sqlite_of_tools()

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>正交表测试工具</title>
+</head>
+<h2>正交表配置</h2>
+<table width="1000" border="1">
+    <a href="http://support.sas.com/techsup/technote/ts723_Designs.txt">正则表获取地址</a>
+    <tr>
+        <th>配置项</th>
+        <th>配置值</th>
+        <th>配置介绍</th>
+    </tr>
+    {% for column_detail in detail %}
+            <!-- max_value -->
+        <tr>
+            <td align="right">{{column_detail.column_name}}</td>
+            <td align="right">{{column_detail.fund_account_max}}</td>
+            <td align="right">{{column_detail.max_value | truncatechars:32}}</td>
+            <td align="right">{{column_detail.interval_type}}</td>
+            <!-- min_value -->
+            <td align="right">{{column_detail.fund_account_min | truncatechars:32}}</td>
+            <td align="right">{{column_detail.min_value}}</td>
+            <td align="right">{{column_detail.interval_type}}</td>
+            <!-- null_value -->
+            <td align="right">{{column_detail.null_value | truncatechars:32}}</td>
+            <!-- remark -->
+            <td align="right"></td>
+        </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

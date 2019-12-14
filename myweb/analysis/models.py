@@ -26,3 +26,11 @@ class LableDetail(models.Model):
     def __unicode__(self):
         return self.table_name
 
+
+class Tools(models.Model):
+    name = models.CharField(max_length=16, default='')
+    summary = models.CharField(max_length=512, default='')
+    url = models.CharField(max_length=64, default='')
+
+    def __unicode__(self):
+        return self.name

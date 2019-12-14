@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>标签数据统计</title>
+</head>
+<body>
+        <!--{{all_tables}}-->
+		<h1 align="center">标签数据统计结果报表</h1>
+		<h2 align="center">标签总个数:{{tables_num}}</h2>
+		<table width=500 border=2 color='black' align="center">
+
+            <tr>
+                <th>表名</th>
+                <th>表数据量</th>
+                <th>备注</th>
+            </tr>
+            {% for table in all_tables %}
+            <tr>
+                <td align="left">{{table.table_name}}</td>
+                <td align="right">{{table.table_num}}</td>
+                <td><a href="detail/{{table.table_name}}" align="center">标签详情</a></td>
+            </tr>
+            {% endfor %}
+		</table>
+
+</body>
+</html>
