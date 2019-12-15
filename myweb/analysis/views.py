@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import LableNum, LableDetail, Tools
+from .orthogonalArray.config import Config
 # Create your views here.
 
 def homepage(request):
@@ -21,5 +22,7 @@ def get_detail(request, table_name="acct_wt_user_money_in_out"):
     return render(request, 'detail.html', locals())
 
 def get_orthogonal_array_info(request):
-    from orthogonal_array.config import Config
-    config = Config()
+    config = Config(config_file="conf/conf.ini")
+    factor, col, split = config.get_config()
+    col = ",".join(col)
+    return render(request, 'orthogonal_array.html', locals())

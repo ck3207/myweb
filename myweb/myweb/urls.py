@@ -23,4 +23,5 @@ urlpatterns = [
     path('', v.homepage, name='homepage'),
     re_path('^labels/$', v.get_labels, name='lables'),
     path('labels/detail/<str:table_name>', v.get_detail, name='detail'),
+    path('orthogonalArray/', v.get_orthogonal_array_info, name='orthogonal_array'),
 ]
