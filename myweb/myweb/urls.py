@@ -24,4 +24,9 @@ urlpatterns = [
     re_path('^labels/$', v.get_labels, name='lables'),
     path('labels/detail/<str:table_name>', v.get_detail, name='detail'),
     path('orthogonalArray/', v.get_orthogonal_array_info, name='orthogonal_array'),
+    path('addHost/', v.add_host, name='addHostHtml'),
+    path('addHost/result.html', v.add_host_detail, name='addHostDetail'),
+    path('del/', v.del_data, name='del_data'),
+    path('addHostDetail/', v.add_host_detail, name='addHostDetail2'),
+    path('autoDeploy/', v.autoDeploy, name='autoDeploy'),
 ]

@@ -92,7 +92,11 @@ def load_data_to_sqlite_of_tools():
     比如 某一计算日的标签总数量，标签每个维度的极值，标签每个维度的空值情况；", "/labels"],
              "正交表转化": ["通过正交表查询网站(http://support.sas.com/techsup/technote/ts723_Designs.txt)，\
               找到符合的正交表，然后设置正交表的有效列，以及实际填充值，\
-              最终生成一个可直接复制到excel的正交表；", "/orthogonalArray"]}
+              最终生成一个可直接复制到excel的正交表；", "/orthogonalArray"],
+             "添加Linux远程服务器": ["添加远程服务器，以备其他远程连接使用；\
+             比如：自动化部署，需要连接远程服务器；", "/addHost"],
+             "上传文件": ["可上传文件到服务器", "/uploadFile"],
+             "自动化部署": ["通过执行服务器上的命令，来实现远程部署", "/autoDeploy"]}
     Tools.objects.all().delete()
     for name, values in tools.items():
         Tools.objects.create(name=name, summary=values[0], url=values[1])

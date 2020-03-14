@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>autoDeploy</title>
+</head>
+<style>
+    div {
+        position: absolute;
+        margin: auto;
+        top: 40%;
+        right: 50%;
+
+    }
+
+</style>
+<body>
+<div>
+    <!--
+    <table>
+        <caption>服务器明细</caption>
+        <tr>
+            <th>Host</th>
+            <th>Port</th>
+            <th>Username</th>
+            <th>Password</th>
+        </tr>
+        {% for data in  datas %}
+        <tr>
+            <td>{{data.address}}</td>
+            <td>{{data.port}}</td>
+            <td>{{data.user}}</td>
+            <td>{{data.password}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    -->
+    <select size="10" autofocus>
+        {% for data in datas %}
+        <option>Host: {{data.address}}, User: {{data.user}}</option>
+    </select>
+</div>
+</body>
+</html>

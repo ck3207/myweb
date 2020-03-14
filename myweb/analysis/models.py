@@ -28,9 +28,23 @@ class LableDetail(models.Model):
 
 
 class Tools(models.Model):
+    """测试工具数据库"""
     name = models.CharField(max_length=16, default='')
     summary = models.CharField(max_length=512, default='')
     url = models.CharField(max_length=64, default='')
 
     def __unicode__(self):
         return self.name
+
+
+class Servers(models.Model):
+    """服务器信息数据库"""
+    id = models.IntegerField(primary_key=True, auto_created=True)
+    address = models.CharField(max_length=16, default='')
+    port = models.IntegerField()
+    user = models.CharField(max_length=32, default='')
+    password = models.CharField(max_length=64, default='')
+
+
+    class Meta:
+        unique_together = ('address', 'port', 'user')
