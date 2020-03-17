@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, re_path
 from django.conf.urls import url
 from analysis import views as v
+from posts import views as vp
 
 urlpatterns = [
     path('admin/', admin.site.urls),

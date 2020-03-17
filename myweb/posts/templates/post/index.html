@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form name="my form" action="/" method="GET" >
+    现在的心情：<br/>
+    {% for mood in moods %}
+    <input type="radio" name="mood" value="{{mood.mood}}">{{mood.mood}}
+    {% endfor %}
+    <br/>
+    心情留言板：<br/>
+    <textarea name="user_post" row="5" cols="50"></textarea>
+    <br/>
+    <label for="user_id">你的昵称</label>
+    <input id="user_id" type="text" name="user_id">
+
+    <label for="user_pass">张贴密码</label>
+    <input id="user_pass" type="password" name="user_pass">
+
+    <input type="submit" value="张贴">
+    <input type="reset" value="清除重置">
+
+
+</form>
+
+<div class="row" >
+    {% for p in posts %}
+    <div class="col-sm-12 col-md-4">
+        <div class="panel panel-primary">
+            <div class="pannel-heading">[{{p.nickname}}]觉得{{p.mood}}</div>
+            <div class="pannel-body">{{p.message | linebreaks}}</div>
+            <div class="pannel-footer" align="right"></div>
+            <i><small>{{p.pub_time}}</small></i>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if message %}
+<div  class="alert alert-warning">{{message}}</div>
+{% endif %}
+</body>
+</html>
