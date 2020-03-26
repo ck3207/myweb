@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include 'header.html' %}
+
+<body>
+<form name='deploy-on-light' action='light' method='GET'>
+    <label for='pkg_id'>选择部署包</label>
+    {% for pkg in {{ pkg_list }} %}
+        <input type='radio' name='pkg_id' value=''>
+    {% endfor %}
+    <label for='light-token'>light平台token</label>
+    <input name='light-token' type='text'>
+    <input type='submit' value='确定'>
+</form>
+</body>
+</html>

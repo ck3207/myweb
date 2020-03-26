@@ -5,8 +5,9 @@ import django
 os.environ.update({"DJANGO_SETTINGS_MODULE": "myweb.settings"})
 django.setup()
 
-from analysis.models import LableNum, LableDetail
-from analysis.models import Tools
+from analysis.models import LableNum, LableDetail, Servers
+from analysis.models import Tools, ConfigTable
+from analysis.conf.config import ConfigInfo
 __author__ = "chenk"
 
 
@@ -96,15 +97,41 @@ def load_data_to_sqlite_of_tools():
              "添加Linux远程服务器": ["添加远程服务器，以备其他远程连接使用；\
              比如：自动化部署，需要连接远程服务器；", "/addHost"],
              "上传文件": ["可上传文件到服务器", "/uploadFile"],
-             "自动化部署": ["通过执行服务器上的命令，来实现远程部署", "/autoDeploy"]}
+             "自动化部署": ["通过执行服务器上的命令，来实现远程部署", "/autoDeploy"],
+             "light平台部署": ["通过选择以及配置一些基本信息，实现在light平台上部署", "/autoDeploy/light"],
+             }
     Tools.objects.all().delete()
     for name, values in tools.items():
+        print(name, values[0], values[1])
         Tools.objects.create(name=name, summary=values[0], url=values[1])
-
+    print("Load data of labels successfully.")
     return
 
+def load_data_to_sqlite_of_config():
+    import configparser
+    cf = configparser.ConfigParser()
+    cf.read(filenames='conf/conf-pkgs.ini', encoding='utf-8')
+    print('Setions: ',cf.sections())
+    ConfigTable.objects.all().delete()
+    for section in cf.sections():
+        ConfigTable.objects.create(section=section, section_flag=1)
+        for option in cf.options(section):
+            print(section, option, cf.get(section=section, option=option))
+            ConfigTable.objects.create(section=section, option=option, value=cf.get(section=section, option=option))
+    print("Load data of config successfully.")
 
+def test():
+    a = ConfigTable.objects.get(section='public', option='light', section_flag=0)
+    print(a.value)
+
+    ct = ConfigTable.objects.filter(section='public', section_flag=0)
+    for each in ct:
+        print(each)
+        print(each.option, each.value)
+    
 if __name__ == "__main__":
     # os.environ.update({"DJANGO_SETTINGS_MODULE": "config.settings"})
     # load_data_to_sqlite_of_labels()
-    load_data_to_sqlite_of_tools()
+    # load_data_to_sqlite_of_tools()
+    # load_data_to_sqlite_of_config()
+    test()

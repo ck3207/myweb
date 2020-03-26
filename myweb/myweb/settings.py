@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'ew&c)*k!rd(!_8%touya$--p5u#s&!%4l$tljtq0uy)@on8%1y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # ALLOWED_HOSTS = ["192.168.1.113", "127.0.0.1"]
 ALLOWED_HOSTS = ["*"]
@@ -121,3 +121,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# 上传文件目录
+UPLOAD_FILE_ROOT = os.path.join(BASE_DIR, 'static/upload')
+
+# 下载文件目录
+DOWNLOAD_FILE_ROOT = os.path.join(BASE_DIR, 'static/download')

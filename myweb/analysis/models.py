@@ -48,3 +48,16 @@ class Servers(models.Model):
 
     class Meta:
         unique_together = ('address', 'port', 'user')
+        
+        
+class ConfigTable(models.Model):
+    """配置表
+    当 section_flag 字段为 1时， 此数据为 section 数据；
+    当 section_flag 字段为 0时， 此数据为 section 下各个option 的数据；
+    """
+    id = models.IntegerField(primary_key=True, auto_created=True)
+    section = models.CharField(max_length=32, default='')
+    option = models.CharField(max_length=32, default='')
+    value = models.CharField(max_length=512, default='')
+    section_flag = models.BooleanField(default=0)
+

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include "header.html" %}
+<style>
+div input {
+    width: 300px;
+}
+
+div label {
+    width: 1000px;
+    background: ;
+}
+</style>
+<body>
+
+<form name='deploy-on-light' action='deploy-on-light/' method='POST' enctype="multipart/form-data" >
+    <label for='section'>选 择 部 署 包</label>
+    {% for section in sections %}
+        {% if section.section == 'zhongyou-fans' %}
+            <input type='radio' name='section' value={{section.section}} checked>{{section.section}}
+        {% else %}
+            <input type='radio' name='section' value={{section.section}} >{{section.section}}
+        {% endif %}
+    {% endfor %}
+    <br>
+    <div id='input'>
+        <label for='light_token'>light平台token</label>
+        <input name='light_token' type='text' value='{{light_token.Authorization}}' >
+    </div>
+    <label for='file'>文 件 上 传</label>
+    <input type='file' name='file'><br>
+    <input type='submit' value='部署'>
+</form>
+<hr>
+
+</body>
+</html>
