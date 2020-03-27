@@ -60,4 +60,5 @@ class ConfigTable(models.Model):
     option = models.CharField(max_length=32, default='')
     value = models.CharField(max_length=512, default='')
     section_flag = models.BooleanField(default=0)
+    date_time = models.DateTimeField(auto_now=True)
 

@@ -108,13 +108,15 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# 上海时区
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+# 是否使用默认时区(美国时区)
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

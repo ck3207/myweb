@@ -76,36 +76,53 @@ def autoDeploy(request):
 def get_pkgs(request):
     config_info = ConfigTable.objects.all()
     sections = ConfigTable.objects.filter(section_flag=1).exclude(section='public')
-    light_token = json.loads(ConfigTable.objects.get(section='public', option='light', section_flag=0).value)
-    print(light_token)
+    # 获取token数据
+    light_token_data = ConfigTable.objects.get(section='public', option='light', section_flag=0)
+    pkg_token_data = ConfigTable.objects.get(section='public', option='pkg', section_flag=0)
+    light_token = json.loads(light_token_data.value)
+    pkg_token = json.loads(pkg_token_data.value)
+    light_date_time = light_token_data.date_time
+    pkg_date_time = pkg_token_data.date_time
     return render(request, 'light.html', locals())
     # return HttpResponse('light.html')
 
 @csrf_exempt    
 def deploy_on_lihgt(request):
+    # Get the value of argues
     section = request.POST['section']
     light_token = request.POST['light_token'].strip()
     pkg_token = request.POST['pkg_token'].strip()
+    file = request.FILES['file']
+    path = request.POST['path']
+    
+    # if both file and path is existed, use file, drop path.
+    if file:
     # deal with upload file.
-    try:
-        file = request.FILES['file']
-        file_path = os.path.join(settings.UPLOAD_FILE_ROOT, file.name)
-        with open(file_path, 'wb') as f:
-            for info in file.chunks():
-                f.write(info)
-        print('Upload File Successfully.')
-    except Exception as e:
-        print(str(e))
-        return HttpResponse('Upload File Failed.')
+        try:
+            file_path = os.path.join(settings.UPLOAD_FILE_ROOT, file.name)
+            with open(file_path, 'wb') as f:
+                for info in file.chunks():
+                    f.write(info)
+            print('Upload File Successfully.')
+        except Exception as e:
+            print(str(e))
+            return HttpResponse('Upload File Failed.')
+    else:
+        if pkg_token:
+            pkg_token = {"Cookie": pkg_token}
+        else:
+            pkg_token = json.loads(ConfigTable.objects.get(section='public', option='pkg', section_flag=0).value)
+        download = Download(file_path=path, headers=pkg_token)
+        download.download(settings.DOWNLOAD_FILE_PATH)
+        if os.path.getsize(os.path.join(settings.DOWNLOAD_FILE_PATH, os.path.basename(path))) < 1000:
+            return HttpResponse('PKG Token May Be Overdue. Please Reset It.')
+    
     # IF light_token was not given, then got it from table.
     if light_token:
         light_token = {"Authorization": light_token}
     else:
         light_token = json.loads(ConfigTable.objects.get(section='public', option='light', section_flag=0).value)
-    download_path = request.POST['download_path']
-    download = Download(file_path=download_path, headers=pkg_token)
-    download.download(settings.DOWNLOAD_FILE_PATH)
-    # return HttpResponse(light_token)
+
     # ids = {app_id: pkg_id}
     ids = json.loads(ConfigTable.objects.get(section=section, option="ids", section_flag=0).value)
     deploy = DeployOnLight(headers=light_token)
