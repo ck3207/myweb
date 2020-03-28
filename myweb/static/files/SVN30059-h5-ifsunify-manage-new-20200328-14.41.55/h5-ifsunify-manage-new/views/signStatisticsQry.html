@@ -1,0 +1,117 @@
+<div class="module-page">
+  <div class="module-body sign-statistics-qry">
+    <div class="tab-change">
+      <button if-show-ele="330" ng-class="{ 'tab-active' : vm.currentSession == 0 }" ng-click="vm.setCurrentSession(0)">机构签约统计查询</button>
+      <button if-show-ele="332" ng-class="{ 'tab-active' : vm.currentSession == 1 }" ng-click="vm.setCurrentSession(1)">投顾签约统计查询</button>
+    </div>
+    <div>
+      <!-- 表单 -->
+      <form role="form" class="form-base">
+        <div class="form-title form-group">
+          <div class="input-item">
+            <label class="control-label label-big">组织机构名称：</label>
+            <div class=" input-normal">
+              <select class="form-control" ng-model="vm.branchNo" ng-options="x.value as x.name for x in vm.branchList">
+                <option value="">--请选择--</option>
+              </select>
+            </div>
+          </div>
+          <div class="input-item" ng-if="vm.currentSession == 1">
+            <label for="input1" class="control-label label-big">投顾名称：</label>
+            <div class=" input-normal">
+              <input type="text" id="input1" class="form-control" ng-module="vm.brokerName">
+            </div>
+          </div>
+        </div>
+        <div class="form-group date-height">
+          <div class="date-box">
+            <label for="startTime-select" class="col-sm-1 control-label date-label-normal">开始日期：</label>
+            <div class="col-sm-2 input-box date-input-normal">
+              <span class="date-select" ng-click="vm.openStartTimeFunc()"><i class="iconfont icon-calendar"></i></span>
+              <input class="form-control" type="text" name="startTime" id="startTime-select"
+                      uib-datepicker-popup=""
+                      ng-model="vm.startTime"
+                      ng-required="true"
+                      is-open="vm.popupStartTimeOpened"
+                      datepicker-options="vm.dateOptions"
+                      clear-text="清除"
+                      close-text="关闭"
+                      current-text="今天"
+                      alt-input-formats="altInputFormats"
+                      ng-click="vm.openStartTimeFunc()">
+            </div>
+            <label for="endTime-select" class="col-sm-1 control-label date-label-normal">结束日期：</label>
+            <div class="col-sm-2 input-box date-input-normal">
+              <span class="date-select" ng-click="vm.openEndTimeFunc()"><i class="iconfont icon-calendar"></i></span>
+              <input class="form-control" type="text" name="endTime" id="endTime-select"
+                      uib-datepicker-popup=""
+                      ng-model="vm.endTime"
+                      ng-required="true"
+                      is-open="vm.popupEndTimeOpened"
+                      datepicker-options="vm.dateOptions"
+                      clear-text="清除"
+                      close-text="关闭"
+                      current-text="今天"
+                      alt-input-formats="altInputFormats"
+                      ng-click="vm.openEndTimeFunc()">
+            </div>
+          </div>
+          <button type="button" class="btn-normal btn-green" ng-click="vm.searchFunc();">查询</button>
+        </div>
+      </form>
+      <!-- 列表 -->
+      <form role="form" class="form-base">
+        <div class="form-title" ng-if="vm.currentSession == 0">
+          <span class="form-header header-line"></span><span class="form-header header-title">机构订单统计列表</span>
+          <button type="button" class="btn-normal btn-blue" ng-click="vm.download();">导出</button>
+          <span class="record-date">统计日期：{{vm.dateStr}}</span>
+        </div>
+        <div class="form-title" ng-if="vm.currentSession == 1">
+          <span class="form-header header-line"></span><span class="form-header header-title">投顾签约统计查询</span>
+          <button type="button" class="btn-normal btn-blue" ng-click="vm.download();">导出</button>
+          <span class="record-date">统计日期：{{vm.dateStr}}</span>
+        </div>
+        <div class="form-group min-table table-responsive">
+          <table class="table cloud-ui-table">
+            <thead>
+            <tr>
+              <th class="list-width" title="组织机构名称">组织机构名称</th>
+              <th ng-if="vm.currentSession == 1" class="list-width" title="投顾名称">投顾名称</th>
+              <th class="list-width" title="服务类型">存量客户数</th>
+              <th class="list-width" title="订单总数">新签约客户总数</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="all">
+              <td ng-cloak class="list-width" title="汇总 (全部订单数据)">汇总 (全部订单数据)</td>
+              <td ng-cloak ng-if="vm.currentSession == 1" class="list-width"></td>
+              <td ng-cloak class="list-width" title="{{vm.allData.total_sign_num || 0}}">{{vm.allData.total_sign_num || 0}}</td>
+              <td ng-cloak class="list-width" title="{{vm.allData.new_sign_num || 0}}">{{vm.allData.new_sign_num || 0}}</td>
+            </tr>
+            <tr ng-repeat="x in vm.dataList">
+              <td ng-cloak class="list-width" title="{{x.branchName}}">{{x.branchName}}</td>
+              <td ng-cloak ng-if="vm.currentSession == 1" class="list-width" title="{{x.brokerName}}">{{x.brokerName}}</td>
+              <td ng-cloak class="list-width" title="{{x.totalSignNum}}">{{x.totalSignNum}}</td>
+              <td ng-cloak class="list-width" title="{{x.newSignNum}}">{{x.newSignNum}}</td>
+            </tr>
+            </tbody>
+          </table>
+          <small class="null-data" ng-if="!vm.dataList.length">暂无数据</small>
+          <div class="cloud-ui-pagination">
+            <ul uib-pagination
+                ng-model="vm.currentPage"
+                items-per-page="vm.itemPerPage"
+                total-items="vm.totalItems"
+                max-size="vm.maxSize"
+                boundary-links="false"
+                boundary-link-numbers="true"
+                previous-text="上一页"
+                ng-change="vm.pageChangeFunc();"
+                next-text="下一页">
+            </ul>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

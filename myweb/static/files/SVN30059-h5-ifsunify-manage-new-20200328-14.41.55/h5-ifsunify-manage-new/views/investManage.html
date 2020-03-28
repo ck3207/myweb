@@ -1,0 +1,201 @@
+<div class="module-page">
+  <div class="module-body invest-manage">
+    <div class="tab-change">
+      <button ng-class="{ 'tab-active' : vm.currentSession == 0 }" ng-click="vm.setCurrentSession(0)">正常投顾</button>
+      <button ng-class="{ 'tab-active' : vm.currentSession == 1 }" ng-click="vm.setCurrentSession(1)">限制投顾</button>
+      <button ng-class="{ 'tab-active' : vm.currentSession == 5 }" ng-click="vm.setCurrentSession(5)">隐藏投顾</button>
+    </div>
+    <div>
+      <form role="form" class="form-base">
+        <div class="form-title form-group">
+          <span class="form-header header-line"></span><span class="form-header header-title">角色列表</span>
+          <button if-show-ele="97" type="button" class="btn-normal btn-blue btn-right" ng-click="vm.updatePwd();">重置密码</button>
+          <button type="button" class="btn-normal btn-green btn-right" ng-click="vm.openExportDataModal();">导出</button>
+          <button type="button" class="btn-normal btn-blue" ui-sref="home.batchAddNewInvest">批量新增</button>
+          <button if-show-ele="90" type="button" class="btn-normal btn-blue btn-right" ng-click="vm.enterAddNewInvest();">新增</button>
+          <div class="search-item">
+            <div class="input-group input-normal">
+              <input type="text" class="form-control" placeholder="请输入" ng-model="vm.keywords" />
+              <span class="input-group-btn" ng-click="vm.adviserListQry();">
+                <i class="icon icon-seek"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="table-content row">
+          <div class="table-list col-sm-6">
+            <table class="content-list">
+              <thead>
+                <tr class="table-title">
+                  <th class="list-width list-forty">投顾名称</th>
+                  <th class="list-width list-thirty">归属</th>
+                  <th class="list-width list-thirty">手机号码</th>
+                  <th class="list-arr"></th>
+                </tr>
+              </thead>
+              <tbody class="main-list">
+                <tr class="list" ng-class="{'selected': $index == vm.selectedIndex}" ng-repeat="item in vm.adviserList" ng-click="vm.displayAdviserInfo($index, item);">
+                  <td class="list-width list-forty" title="{{ item.aliasName }}">{{ item.aliasName }}</td>
+                  <td class="list-width list-thirty" title="{{ item.businessDept }}">{{ item.businessDept || '暂无' }}</td>
+                  <td class="list-width list-thirty" title="{{ item.mobile }}">{{ item.mobile }}</td>
+                  <td class="arr"></td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="no-data" ng-if="vm.adviserList.length == 0 || !vm.adviserList">暂无数据</p>
+            <div class="cloud-ui-pagination">
+              <ul
+                uib-pagination
+                ng-model="vm.currentPage"
+                items-per-page="vm.itemPerPage"
+                total-items="vm.totalItems"
+                max-size="vm.maxSize"
+                boundary-links="false"
+                boundary-link-numbers="true"
+                previous-text="上一页"
+                ng-change="vm.pageChangeFunc();"
+                next-text="下一页"
+              ></ul>
+            </div>
+          </div>
+          <div class="table-detail col-sm-6" ng-if="vm.adviserList.length">
+            <div class="table-gray"></div>
+            <div class="detail-content">
+              <div class="client-avatar">
+                <img ng-src="{{ vm.avatarImg }}" alt="{{ vm.adviserDetailInfo.aliasName || '暂无' }}" />
+              </div>
+              <div class="client-intro">
+                <span class="client-name">{{ vm.adviserDetailInfo.aliasName || '暂无' }}</span>
+                <span class="client-symbol" ng-if="vm.currentSession == 0">正常</span>
+                <span class="client-symbol limit" ng-if="vm.currentSession == 1">限制</span>
+                <span class="client-symbol limit" ng-if="vm.currentSession == 5">隐藏</span>
+              </div>
+              <div class="client-info row">
+                <div class="input-item col-sm-6 weixinNo">
+                  <label class="control-label label-normal">微信号：</label>
+                  <span>{{ vm.adviserDetailInfo.weixinNo }}</span>
+                </div>
+                <div class="input-item col-sm-6 phone">
+                  <label class="control-label label-normal">手机号：</label>
+                  <span>{{ vm.adviserDetailInfo.mobile || '暂无' }}</span>
+                </div>
+              </div>
+              <div class="client-list">
+                <h4>资质信息</h4>
+                <div class="client-content row">
+                  <div class="input-item col-sm-6">
+                    <label class="control-label label-normal">资格证书种类：</label>
+                    <span title="{{ vm.adviserDetailInfo.credentialsType | certificateType }}">{{ vm.adviserDetailInfo.credentialsType | certificateType }}</span>
+                  </div>
+                  <div class="input-item col-sm-6">
+                    <label class="control-label label-normal">投顾类型：</label>
+                    <span>{{ vm.adviserDetailInfo.adviserType | formatAdviserType }}</span>
+                  </div>
+                </div>
+                <div class="client-content row">
+                  <div class="input-item col-sm-6">
+                    <label class="control-label label-normal">资格证号码：</label>
+                    <span title="{{ vm.adviserDetailInfo.credentialsNo || '暂无' }}">{{ vm.adviserDetailInfo.credentialsNo || '暂无' }}</span>
+                  </div>
+                </div>
+              </div>
+              <!-- 正常 -->
+              <!-- <div class="client-list" ng-if="vm.currentSession == 0">
+                <h4>绩效情况</h4>
+                <div class="client-content row">
+                  <div class="input-item col-sm-6">
+                    <label class="control-label label-normal">发布观点数：</label>
+                    <span>{{ vm.adviserDetailInfo.data.pointNum || '暂无' }}</span>
+                  </div>
+                  <div class="input-item col-sm-6">
+                    <label class="control-label label-normal">问答回复数：</label>
+                    <span>{{ vm.adviserDetailInfo.data.questionNum || '暂无' }}</span>
+                  </div>
+                </div>
+                <div class="client-content row">
+                  <div class="input-item col-sm-6">
+                    <label class="control-label label-normal">当前组合数量：</label>
+                    <span>{{ vm.adviserDetailInfo.data.combiNum || '暂无' }}</span>
+                  </div>
+                  <div class="input-item col-sm-6">
+                    <label class="control-label label-normal">组合销售额：</label>
+                    <span>{{ vm.adviserDetailInfo.data.combiSales || '暂无' }}</span>
+                  </div>
+                </div>
+                <div class="client-content row">
+                  <div class="input-item col-sm-6">
+                    <label class="control-label label-normal">累计调仓次数：</label>
+                    <span>{{ vm.adviserDetailInfo.data.TransNum || '暂无' }}</span>
+                  </div>
+                </div>
+              </div> -->
+              
+              <!-- 限制 -->
+              <!-- <div class="client-list" ng-if="vm.currentSession == 1">
+                <h4>绩效情况</h4>
+                <div class="client-content row">
+                  <div class="input-item col-sm-6">
+                    <label class="control-label label-normal">发布观点数：</label>
+                    <span>{{ vm.adviserDetailInfo.data.pointNum == undefined ? '暂无' : vm.adviserDetailInfo.data.pointNum }}</span>
+                  </div>
+                  <div class="input-item col-sm-6">
+                    <label class="control-label label-normal">评论数：</label>
+                    <span>{{ vm.adviserDetailInfo.data.commentNum == undefined ? '暂无' : vm.adviserDetailInfo.data.commentNum }}</span>
+                  </div>
+                </div>
+                <div class="client-content row">
+                  <div class="input-item col-sm-6">
+                    <label class="control-label label-normal">被点赞数：</label>
+                    <span>{{ vm.adviserDetailInfo.data.upvoteNum == undefined ? '暂无' : vm.adviserDetailInfo.data.upvoteNum }}</span>
+                  </div>
+                  <div class="input-item col-sm-6">
+                    <label class="control-label label-normal">直播数：</label>
+                    <span>{{ vm.adviserDetailInfo.data.liveNum == undefined ? '暂无' : vm.adviserDetailInfo.data.liveNum }}</span>
+                  </div>
+                </div>
+                <div class="client-content row">
+                  <div class="input-item col-sm-6">
+                    <label class="control-label label-normal">仿真盈余：</label>
+                    <span>{{ vm.adviserDetailInfo.data.profitAmount == undefined ? '暂无' : vm.adviserDetailInfo.data.profitAmount }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="client-list" ng-if="vm.currentSession == 1">
+                <div class="cut-off"></div>
+                <div class="client-content row">
+                  <div class="input-item col-sm-6">
+                    <label class="control-label label-normal">签约次数：</label>
+                    <span>{{ vm.adviserDetailInfo.data.signNum == undefined ? '暂无' : vm.adviserDetailInfo.data.signNum }}</span>
+                  </div>
+                  <div class="input-item col-sm-6">
+                    <label class="control-label label-normal">售出组合数：</label>
+                    <span>{{ vm.adviserDetailInfo.data.sellNum == undefined ? '暂无' : vm.adviserDetailInfo.data.sellNum }}</span>
+                  </div>
+                </div>
+                <div class="client-content row">
+                  <div class="input-item col-sm-6">
+                    <label class="control-label label-normal">调仓次数：</label>
+                    <span>{{ vm.adviserDetailInfo.data.transNum == undefined ? '暂无' : vm.adviserDetailInfo.data.transNum }}</span>
+                  </div>
+                </div>
+              </div> -->
+              <div class="client-search" ng-if="vm.currentSession == 0">
+                <button if-show-ele="93" type="button" class="btn-normal btn-green" ng-click="vm.frozenInvest();">限制</button>
+                <button if-show-ele="98" type="button" class="btn-normal btn-green" ng-click="vm.updateBrokerHiddenFunc(1);">隐藏</button>
+                <span class="show-more" ng-click="vm.enterMoreInvestInfo();">更多详情</span>
+              </div>
+              <div class="client-search" ng-if="vm.currentSession == 1">
+                <button if-show-ele="96" type="button" class="btn-normal btn-green btn-center" ng-click="vm.unfrozenInvest();">解除限制</button>
+                <span class="show-more" ng-click="vm.enterMoreInvestInfo();">更多详情</span>
+              </div>
+              <div class="client-search" ng-if="vm.currentSession == 5">
+                <button if-show-ele="98" type="button" class="btn-normal btn-green btn-center" ng-click="vm.updateBrokerHiddenFunc(0);">解除隐藏</button>
+                <span class="show-more" ng-click="vm.enterMoreInvestInfo();">更多详情</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form> 
+    </div>
+  </div>
+</div>

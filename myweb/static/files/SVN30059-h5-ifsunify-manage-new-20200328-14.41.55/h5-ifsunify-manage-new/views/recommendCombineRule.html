@@ -1,0 +1,117 @@
+<div class="module-page">
+  <div class="module-body recommendCombine">
+    <form role="form" class="form-base">
+      <div class="form-title">
+        <span class="form-header header-line"></span><span class="form-header header-title">推荐组合规则设置</span>
+        <button if-show-ele="201" type="button" class="btn-normal btn-green pull-right" ng-click="vm.publishRule();">发布</button>
+      </div>
+      <div class="form-group">
+        <div class="form-radio">
+          <input class="radio-input-normal" type="radio" name="options" id="radio0" value="0" ng-click="vm.changeShowRule(vm.recomendRadio);" ng-model="vm.recomendRadio"/>
+          <label class="radio-label-normal" for="radio0"></label>
+        </div>
+        <label class="radio-title" for="radio0">按累计收益率由高到低</label>
+        <div class="form-radio">
+          <input class="radio-input-normal" type="radio" name="options" id="radio1" value="7" ng-click="vm.changeShowRule(vm.recomendRadio);" ng-model="vm.recomendRadio"/>
+          <label class="radio-label-normal" for="radio1"></label>
+        </div>
+        <label class="radio-title" for="radio1">按人气/订阅人数排序</label>
+        <div class="form-radio">
+          <input class="radio-input-normal" type="radio" name="options" id="radio2" value="5" ng-click="vm.changeShowRule(vm.recomendRadio);" ng-model="vm.recomendRadio" ng-checked="true"/>
+          <label class="radio-label-normal" for="radio2"></label>
+        </div>
+        <label class="radio-title" for="radio2">自定义</label>
+      </div>
+    </form>
+    <form role="form" class="form-base table-responsive" ng-show="vm.showRule">
+      <div class="form-title">
+        <span class="form-header header-line"></span><span class="form-header header-title">当前系统需要设置<em>3</em>位推荐组合</span>
+      </div>
+      <div class="form-group">
+        <div class="input-item">
+          <label class="control-label label-normal">已选中组合：</label>
+          <div class=" input-normal">
+            <input type="text" class="form-control link-input" ng-model="vm.selectedCombi[0]" ng-readonly="true">
+            <span ng-click="vm.deleteAdviser('adviser0');"><i class="icon icon-error"></i></span>
+          </div>
+        </div>
+        <div class="input-item">
+          <div class=" input-normal">
+            <input type="text" class="form-control link-input" ng-model="vm.selectedCombi[1]" ng-readonly="true">
+            <span ng-click="vm.deleteAdviser('adviser1');"><i class="icon icon-error"></i></span>
+          </div>
+        </div>
+        <div class="input-item">
+          <div class=" input-normal">
+            <input type="text" class="form-control link-input" ng-model="vm.selectedCombi[2]" ng-readonly="true">
+            <span ng-click="vm.deleteAdviser('adviser2');"><i class="icon icon-error"></i></span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group min-width">
+        <div class="input-item">
+          <label for="input0" class="control-label label-normal">组合编号：</label>
+          <div class=" input-normal">
+            <input type="text" id="input0" class="form-control" placeholder="请输入组合编号" ng-model="vm.combiCode">
+          </div>
+        </div>
+        <div class="input-item">
+          <label for="input1" class="control-label label-normal label-special">组合名称:</label>
+          <div class=" input-normal">
+            <input type="text" id="input1" class="form-control" placeholder="请输入组合名称" ng-model="vm.combiName">
+          </div>
+        </div>
+        <button if-show-ele="200" type="button" class="btn-normal btn-blue pull-right" ng-click="vm.adviserInfoQry();">查询</button>
+      </div>
+      <table class="table cloud-ui-table">
+        <thead>
+        <tr>
+          <th class="list-width list-ten">组合编号</th>
+          <th class="list-width list-twenty">组合名称</th>
+          <th class="list-width list-ten">总收益率</th>
+          <th class="list-width list-ten">日收益率</th>
+          <th class="list-width list-ten">周收益率</th>
+          <th class="list-width list-ten">年收益率</th>
+          <!-- <th class="list-width list-ten">投资风格</th> -->
+          <th class="list-width list-ten">关注数</th>
+          <th class="list-width list-ten">订阅数</th>
+          <th class="list-width list-ten">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="item in vm.pageAdviserList">
+          <td class="list-width list-ten">{{item.combi_code}}</td>
+          <td class="list-width list-twenty" title="{{item.combi_name}}">{{item.combi_name}}</td>
+          <td class="list-width list-ten">{{item.income_ratio || "0"*100 | number:2}}%</td>
+          <td class="list-width list-ten">{{item.today_income_ratio || "0"*100 | number:2}}%</td>
+          <td class="list-width list-ten">{{item.week_income_ratio || "0"*100 | number:2}}%</td>
+          <td class="list-width list-ten">{{item.year_income_ratio || "0"*100 | number:2}}%</td>
+          <!-- <td class="list-width list-ten">{{item.invest_style}}</td> -->
+          <td class="list-width list-ten" title="{{item.collect_num}}">{{item.collect_num}}</td>
+          <td class="list-width list-ten" title="{{item.focus_num}}">{{item.focus_num}}</td>
+          <td class="list-width list-ten">
+              <a href="javascript:;" ng-click="vm.upHotCombine(item);">
+                <i class="icon icon-primary icon-stick bg-blue" title="推荐"></i>
+              </a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <small class="null-data" ng-if="!vm.pageAdviserList.length>0">暂无数据</small>
+      <div class="cloud-ui-pagination pull-right">
+        <ul uib-pagination
+            ng-model="vm.currentPage"
+            items-per-page="vm.itemsPerPage"
+            total-items="vm.totalItems"
+            max-size="vm.maxSize"
+            boundary-links="false"
+            boundary-link-numbers="true"
+            previous-text="上一页"
+            ng-change="vm.pageChangeFunc();"
+            next-text="下一页">
+        </ul>
+      </div>
+    </form>
+  </div>
+  <div class="module-footer"></div>
+</div>

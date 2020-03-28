@@ -1,0 +1,133 @@
+<div class="module-page">
+  <div class="module-body log-inquiry">
+    <form role="form" class="form-base first-line">
+      <div class="form-group">
+        <div class="line-head">
+          <div class="input-item">
+            <label class="control-label label-normal">机构编码：</label>
+            <div class=" input-normal" uib-dropdown keyboard-nav>
+              <button id="simple-btn-keyboard-nav1" type="button" class="form-control" uib-dropdown-toggle>
+                <span class="pd-content">{{vm.logBranch}}&nbsp;&nbsp;{{vm.logBranchName}}</span><i class="icon icon-pull-down pd-arrow"></i>
+              </button>
+              <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                <li role="menuitem" ng-repeat="item in vm.dataMulList" ng-click="vm.selectBranchNoFunc(item.branchNo, item.branchName);"><a>{{item.branchNo}}&nbsp;&nbsp;{{item.branchName}}</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="input-item">
+            <label for="input1" class="control-label label-normal">操作员编号：</label>
+
+            <div class=" input-normal">
+              <input type="text" id="input1" class="form-control" placeholder="请输入" ng-model="vm.logOperatorNo">
+            </div>
+          </div>
+          <div class="date-box">
+            <div class="input-item">
+              <label for="startTime-select" class="col-sm-1 control-label date-label-normal">开始日期：</label>
+              <div class="col-sm-2 input-box date-input-normal">
+                <span class="date-select" ng-click="vm.openStartTimeFunc()"><i class="iconfont icon-calendar"></i></span>
+                <input class="form-control" type="text" name="startTime" id="startTime-select"
+                       uib-datepicker-popup=""
+                       ng-model="vm.beginDate"
+                       ng-required="true"
+                       is-open="vm.popupStartTimeOpened"
+                       datepicker-options="vm.dateOptions"
+                       clear-text="清除"
+                       close-text="关闭"
+                       current-text="今天"
+                       alt-input-formats="altInputFormats"
+                       ng-click="vm.openStartTimeFunc()">
+              </div>
+            </div>
+            <div class="input-item">
+              <label for="endTime-select" class="col-sm-1 control-label date-label-normal">结束日期：</label>
+
+              <div class="col-sm-2 input-box date-input-normal">
+                <span class="date-select" ng-click="vm.openEndTimeFunc()"><i class="iconfont icon-calendar"></i></span>
+                <input class="form-control" type="text" name="endTime" id="endTime-select"
+                       uib-datepicker-popup=""
+                       ng-model="vm.endDate"
+                       ng-required="true"
+                       is-open="vm.popupEndTimeOpened"
+                       datepicker-options="vm.dateOptions"
+                       clear-text="清除"
+                       close-text="关闭"
+                       current-text="今天"
+                       alt-input-formats="altInputFormats"
+                       ng-click="vm.openEndTimeFunc()">
+              </div>
+            </div>
+          </div>
+          <div class="input-item">
+            <label for="input1" class="control-label label-normal">开始时间：</label>
+
+            <div class="input-normal">
+              <input name="beginTime" type="time" class="form-control input-sm"
+                     placeholder="请输入..."
+                     ng-model="vm.beginTime" ng-focus="true" required>
+            </div>
+          </div>
+          <div class="input-item">
+            <label for="input1" class="control-label label-normal">结束时间：</label>
+
+            <div class="input-normal">
+              <input name="finishTime" type="time" class="form-control input-sm"
+                     placeholder="请输入..."
+                     ng-model="vm.finishTime" ng-focus="true" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="search">
+          <button if-show-ele="70" type="button" class="btn-normal btn-green" ng-click="vm.logSearchFun();">查询</button>
+        </div>
+      </div>
+    </form>
+    <form role="form" class="form-base">
+      <div class="form-title">
+        <span class="form-header header-line"></span><span class="form-header header-title">操作员日志列表</span>
+        <span class="record-count">总记录数</span><span>{{vm.total_items}}</span>
+      </div>
+      <div class="form-group min-table table-responsive">
+        <table class="table cloud-ui-table">
+          <thead>
+          <tr>
+            <th class="list-width">发生日期</th>
+            <th class="list-width">发生时间</th>
+            <th class="list-width">流水序号</th>
+            <th class="list-width">操作员编号</th>
+            <th class="list-width">机构编码</th>
+            <!-- <th class="list-width">页面操作</th> -->
+            <th class="list-width">备注</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="x in vm.logListDate" id="tr{{$index}}" ng-dblclick="vm.logDetail(x);">
+            <td ng-cloak class="list-width">{{x.sysDate | formatStrToDate}}</td>
+            <td ng-cloak class="list-width">{{x.sysTime | formatStrToTime}}</td>
+            <td ng-cloak class="list-width" title="{{x.serialNo}}">{{x.serialNo}}</td>
+            <td ng-cloak class="list-width" title="{{x.operatorNo}}">{{x.operatorNo}}</td>
+            <td ng-cloak class="list-width" title="{{x.branch}}">{{x.branch}}</td>
+            <!-- <td ng-cloak class="list-width" title="{{x.interfaceName}}">{{x.interfaceName}}</td> -->
+            <td ng-cloak class="list-width" title="{{x.remark || ''}}">{{x.remark || ''}}</td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="cloud-ui-pagination">
+          <ul uib-pagination
+              ng-model="vm.currentPage"
+              items-per-page="vm.itemPerPage"
+              total-items="vm.total_items"
+              max-size="5"
+              boundary-links="false"
+              boundary-link-numbers="true"
+              previous-text="上一页"
+              ng-change="vm.pageChangeFunc();"
+              next-text="下一页">
+          </ul>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="module-footer"></div>
+</div>

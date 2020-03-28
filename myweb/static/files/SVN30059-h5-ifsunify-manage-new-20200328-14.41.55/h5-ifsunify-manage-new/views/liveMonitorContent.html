@@ -1,0 +1,106 @@
+<div class="module-page">
+  <div class="module-body liveMonitorContent">
+    <form role="form" class="form-base">
+      <div class="form-group head">
+        <div class="form-title">
+          <span class="form-header header-line"></span><span class="form-header header-title">直播监控</span>
+        </div>
+        <div class="search-item">
+          <div class="input-group input-normal">
+            <input type="text" class="form-control" placeholder="输入关键字" ng-model="vm.keyword" />
+            <span class="input-group-btn" ng-click="vm.keywordSearch();">
+              <i class="icon icon-seek"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group title">
+        <h4>{{vm.topicTitle || '暂无话题'}}</h4>
+<!--        <span><i class="icon icon-live-number"></i>{{vm.currentLiveNumber}}</span>-->
+      </div>
+      <div class="form-group content">
+        <div class="tab-live-change">
+          <span ng-class="{ 'tab-active' : vm.currentSession == 0 }" ng-click="vm.setCurrentSession(0)">直播</span>
+          <span ng-class="{ 'tab-active' : vm.currentSession == 1 }" ng-click="vm.setCurrentSession(1)">互动</span>
+        </div>
+        <div class="tab-live-content">
+          <div class="tab-live-pane" ng-show="vm.currentSession == 0">
+            <div class="left">
+              <div class="section" ng-repeat="item in vm.liveList track by $index">
+                <div class="user">
+                  <!-- <img src="https://i.ibb.co/ngFzBvJ/timg.jpg" alt=""> -->
+                  <strong>{{item.name}}</strong>
+                  <span>{{item.create_time}}</span>
+                </div>
+                <div class="detail">
+                  <p class="text" ng-if="item.text" ng-bind-html="item.text"></p>
+                  <div class="img" ng-if="item.img">
+                    <img class="image" ng-src="{{item.img}}" alt="">
+                  </div>
+                  <div class="combine" ng-if="item.combine">
+                    <p class="name">{{item.combine.combi_name}}</p>
+                    <p class="tag" ng-repeat="x in item.combine.tag_name">{{x}}</p>
+                    <p class="risk" ng-class="{'red': item.combine.dictData.indexOf('高') > 0, 'orange': item.combine.dictData.indexOf('中') > 0, 'blue': item.combine.dictData.indexOf('低') > 0}">{{item.combine.dictData}}</p>
+                    <div class="income">
+                      <div class="item"><strong>{{(item.combine.income_ratio * 100) | formatToFixed2}}<em>%</em></strong><p>累计收益率</p></div>
+                      <div class="item"><strong>{{(item.combine.week_income_ratio * 100) | formatToFixed2}}<em>%</em></strong><p>周收益率</p></div>
+                      <div class="item"><strong>{{(item.combine.month_income_ratio * 100) | formatToFixed2}}<em>%</em></strong><p>月计收益率</p></div>
+                    </div>
+                    <p class="time">创建时间：{{item.combine.create_date}}</p>
+                  </div>
+                  <i class="delete" ng-click="vm.deleteComment(item)">x</i>
+                </div>
+              </div>
+              <div class="no-data" ng-if="!vm.liveList || !vm.liveList.length">暂无数据</div>
+              <div class="bottom" ng-if="vm.moreLiveData" ng-click="vm.nextPageFunc();">
+                <button>获取更多</button>
+              </div>
+            </div>
+          </div>
+          <div class="tab-live-pane" ng-show="vm.currentSession == 1">
+            <div class="left">
+              <div class="section" ng-repeat="item in vm.commentList track by $index">
+                <div class="user">
+                  <!-- <img src="https://i.ibb.co/ngFzBvJ/timg.jpg" alt=""> -->
+                  <strong>{{item.name}}</strong>
+                  <span>{{item.time}}</span>
+                </div>
+                <div class="detail">
+                  <p class="text" ng-if="item.text" ng-bind-html="item.text"></p>
+                  <div class="img" ng-if="item.img">
+                    <img class="image" ng-src="{{item.img}}" alt="">
+                  </div>
+                  <div class="combine" ng-if="item.combine">
+                    <p class="name">{{item.combine.combi_name}}</p>
+                    <p class="tag" ng-repeat="x in item.combine.tag_name">{{x}}</p>
+                    <p class="risk" ng-class="{'red': item.combine.dictData.indexOf('高') > 0, 'orange': item.combine.dictData.indexOf('中') > 0, 'blue': item.combine.dictData.indexOf('低') > 0}">{{item.combine.dictData}}</p>
+                    <div class="income">
+                      <div class="item"><strong>{{(item.combine.income_ratio * 100) | formatToFixed2}}<em>%</em></strong><p>累计收益率</p></div>
+                      <div class="item"><strong>{{(item.combine.week_income_ratio * 100) | formatToFixed2}}<em>%</em></strong><p>周收益率</p></div>
+                      <div class="item"><strong>{{(item.combine.month_income_ratio * 100) | formatToFixed2}}<em>%</em></strong><p>月计收益率</p></div>
+                    </div>
+                    <p class="time">创建时间：{{item.combine.create_date}}</p>
+                  </div>
+                  <i class="delete" ng-click="vm.deleteComment(item)">x</i>
+                </div>
+              </div>
+              <div class="no-data" ng-if="!vm.commentList || !vm.commentList.length">暂无数据</div>
+              <div class="bottom" ng-if="vm.moreData" ng-click="vm.nextPageFunc();">
+                <button>获取更多</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="right">
+          <p>当前主播</p>
+          <div class="holder">
+            <!-- <img src="https://i.ibb.co/ngFzBvJ/timg.jpg" alt=""> -->
+            <strong>{{vm.userName}}</strong>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="module-footer"></div>
+</div>

@@ -129,3 +129,6 @@ UPLOAD_FILE_ROOT = os.path.join(BASE_DIR, 'static/upload')
 
 # 下载文件目录
 DOWNLOAD_FILE_ROOT = os.path.join(BASE_DIR, 'static/download')
+
+# 部署包目录
+UPLOAD_OR_DOWNLOAD_FILE_PATH = os.path.join(BASE_DIR, 'static/files')

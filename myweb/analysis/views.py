@@ -8,6 +8,7 @@ from .models import LableNum, LableDetail, Tools, Servers, ConfigTable
 from .conf.config import ConfigInfo
 from .utilities.deploy_on_light import DeployOnLight
 from .utilities.download_from_pkg import Download
+from .utilities.replace_config_file import Replace
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 # Create your views here.
@@ -92,15 +93,16 @@ def deploy_on_lihgt(request):
     section = request.POST['section']
     light_token = request.POST['light_token'].strip()
     pkg_token = request.POST['pkg_token'].strip()
-    file = request.FILES['file']
-    path = request.POST['path']
-    
+    file = request.FILES['file']    # 上传的文件
+    pkg_full_path = request.POST['path'] # 需要下载的pkg文件全路径
+    print(pkg_token)
+    # 获取部署包
     # if both file and path is existed, use file, drop path.
     if file:
     # deal with upload file.
         try:
-            file_path = os.path.join(settings.UPLOAD_FILE_ROOT, file.name)
-            with open(file_path, 'wb') as f:
+            file_full_path = os.path.join(settings.UPLOAD_OR_DOWNLOAD_FILE_PATH, file.name)
+            with open(file_full_path, 'wb') as f:
                 for info in file.chunks():
                     f.write(info)
             print('Upload File Successfully.')
@@ -108,31 +110,48 @@ def deploy_on_lihgt(request):
             print(str(e))
             return HttpResponse('Upload File Failed.')
     else:
+        file_full_path = os.path.join(settings.UPLOAD_OR_DOWNLOAD_FILE_PATH, os.path.basename(pkg_full_path))
         if pkg_token:
             pkg_token = {"Cookie": pkg_token}
         else:
             pkg_token = json.loads(ConfigTable.objects.get(section='public', option='pkg', section_flag=0).value)
-        download = Download(file_path=path, headers=pkg_token)
-        download.download(settings.DOWNLOAD_FILE_PATH)
-        if os.path.getsize(os.path.join(settings.DOWNLOAD_FILE_PATH, os.path.basename(path))) < 1000:
+        # 下载部署包
+        download = Download(file_path=pkg_full_path, headers=pkg_token)
+        download.download(settings.UPLOAD_OR_DOWNLOAD_FILE_PATH)
+        # whether the target file is downloaded or not via the size of download file.
+        if os.path.getsize(file_full_path) < 1000:
             return HttpResponse('PKG Token May Be Overdue. Please Reset It.')
+        else:
+            # update light token
+            ConfigTable.obejects.get_or_update(section='public', option='light', section_flag=0, value=pkg_token)
     
+    # 解压部署包，替换配置文件， 压缩部署包
+    try:
+        rep = Replace(file_path=file_full_path, section=section)
+        # src_dir=压缩源目录， dest_dir=压缩到哪个目录， file_name=压缩后的文件名
+        src_dir, dest_dir, file_name = rep.unzip_file()
+        rep.replace_config(os.path.join(settings.UPLOAD_OR_DOWNLOAD_FILE_PATH, section), src_dir, "config.local.js")
+        new_file_full_path = rep.zip_file(src_dir=src_dir, dest_dir=dest_dir, file_name=file_name)
+        return HttpResponse('Let me see, whether replace config file successful or not.')
+    except:
+        return HttpResponse('Unzip or Zip file error: {0}'.format(os.path.basename(file_full_path)))
+
+    # light 部署
     # IF light_token was not given, then got it from table.
     if light_token:
         light_token = {"Authorization": light_token}
     else:
         light_token = json.loads(ConfigTable.objects.get(section='public', option='light', section_flag=0).value)
-
     # ids = {app_id: pkg_id}
     ids = json.loads(ConfigTable.objects.get(section=section, option="ids", section_flag=0).value)
     deploy = DeployOnLight(headers=light_token)
     for app_id, pkg_id in ids.items():
         try:
-            deploy.deploy(file_path=os.path.join(settings.UPLOAD_FILE_ROOT, file.name),
-            app_id=app_id, pkg_id=pkg_id)
+            deploy.deploy(file_path=new_file_full_path, app_id=app_id, pkg_id=pkg_id)
+            # update light token
+            ConfigTable.obejects.get_or_update(section='public', option='light', section_flag=0, value=light_token)
         except Exception as e:
             print(str(e))
             return HttpResponse('The Light Token is probably overdue.')
         
-    # return render(request, 'light.html', locals())
     return HttpResponse('Deploy {0} on app {1} Successfully.'.format(file.name, section))

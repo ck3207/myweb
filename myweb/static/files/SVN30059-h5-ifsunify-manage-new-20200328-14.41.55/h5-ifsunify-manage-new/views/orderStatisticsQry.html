@@ -1,0 +1,146 @@
+<div class="module-page">
+  <div class="module-body order-statistics-qry">
+    <div class="tab-change">
+      <button if-show-ele="310" ng-class="{ 'tab-active' : vm.currentSession == 0 }" ng-click="vm.setCurrentSession(0)">机构订单统计查询</button>
+      <button if-show-ele="312" ng-class="{ 'tab-active' : vm.currentSession == 1 }" ng-click="vm.setCurrentSession(1)">投顾订单统计查询</button>
+    </div>
+    <div>
+      <!-- 表单 -->
+      <form role="form" class="form-base">
+        <div class="form-title form-group">
+          <div class="input-item">
+            <label class="control-label label-big">组织机构名称：</label>
+            <div class=" input-normal">
+              <select class="form-control" ng-model="vm.branchNo" ng-options="x.value as x.name for x in vm.branchList">
+                <option value="">--请选择--</option>
+              </select>
+            </div>
+          </div>
+          <div class="input-item">
+            <label class="control-label label-big">服务类型：</label>
+            <div class=" input-normal">
+              <select class="form-control" ng-model="vm.serviceType" ng-options="x.value as x.name for x in vm.serviceTypeList">
+                <option value="">--请选择--</option>
+              </select>
+            </div>
+          </div>
+          <div class="input-item" ng-if="vm.currentSession == 1">
+            <label for="input1" class="control-label label-big">投顾名称：</label>
+            <div class=" input-normal">
+              <input type="text" id="input1" class="form-control" ng-model="vm.brokerName">
+            </div>
+          </div>
+        </div>
+        <div class="form-group date-height">
+          <div class="date-box">
+            <label for="startTime-select" class="col-sm-1 control-label date-label-normal">开始日期：</label>
+            <div class="col-sm-2 input-box date-input-normal">
+              <span class="date-select" ng-click="vm.openStartTimeFunc()"><i class="iconfont icon-calendar"></i></span>
+              <input class="form-control" type="text" name="startTime" id="startTime-select"
+                     uib-datepicker-popup=""
+                     ng-model="vm.startTime"
+                     ng-required="true"
+                     is-open="vm.popupStartTimeOpened"
+                     datepicker-options="vm.dateOptions"
+                     clear-text="清除"
+                     close-text="关闭"
+                     current-text="今天"
+                     alt-input-formats="altInputFormats"
+                     ng-click="vm.openStartTimeFunc()">
+            </div>
+            <label for="endTime-select" class="col-sm-1 control-label date-label-normal">结束日期：</label>
+            <div class="col-sm-2 input-box date-input-normal">
+              <span class="date-select" ng-click="vm.openEndTimeFunc()"><i class="iconfont icon-calendar"></i></span>
+              <input class="form-control" type="text" name="endTime" id="endTime-select"
+                     uib-datepicker-popup=""
+                     ng-model="vm.endTime"
+                     ng-required="true"
+                     is-open="vm.popupEndTimeOpened"
+                     datepicker-options="vm.dateOptions"
+                     clear-text="清除"
+                     close-text="关闭"
+                     current-text="今天"
+                     alt-input-formats="altInputFormats"
+                     ng-click="vm.openEndTimeFunc()">
+            </div>
+          </div>
+          <button type="button" class="btn-normal btn-green" ng-click="vm.searchFunc();">查询</button>
+        </div>
+      </form>
+      <!-- 列表 -->
+      <form role="form" class="form-base">
+        <button type="button" class="btn-normal btn-blue" ng-click="vm.download();">导出</button>
+        <div class="form-title" ng-if="vm.currentSession == 0">
+          <span class="form-header header-line"></span><span class="form-header header-title">机构订单统计列表</span>
+          <span class="record-date">统计日期：{{vm.dateStr}}</span>
+        </div>
+        <div class="form-title" ng-if="vm.currentSession == 1">
+          <span class="form-header header-line"></span><span class="form-header header-title">投顾订单统计查询</span>
+          <span class="record-date">统计日期：{{vm.dateStr}}</span>
+        </div>
+        <div class="form-group min-table table-responsive">
+          <table class="table cloud-ui-table">
+            <thead>
+            <tr>
+              <th class="list-width" title="组织机构名称">组织机构名称</th>
+              <th ng-if="vm.currentSession == 1" class="list-width" title="投顾名称">投顾名称</th>
+              <th class="list-width" title="服务类型">服务类型</th>
+              <th class="list-width" title="订单总数">订单总数</th>
+              <th class="list-width" title="订单总金额">订单总金额</th>
+              <th class="list-width" title="订单成交数">订单成交数</th>
+              <th class="list-width" title="订单成交总金额">订单成交总金额</th>
+              <th class="list-width" title="订单取消数">订单取消数</th>
+              <th class="list-width" title="订单取消总金额">订单取消总金额</th>
+              <th class="list-width" title="订单退订数">订单退订数</th>
+              <th class="list-width" title="订单退订总金额">订单退订总金额</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="all">
+              <td ng-cloak class="list-width" title="汇总 (全部订单数据)">汇总 (全部订单数据)</td>
+              <td ng-cloak ng-if="vm.currentSession == 1" class="list-width"></td>
+              <td ng-cloak class="list-width"></td>
+              <td ng-cloak class="list-width" title="{{vm.allData.total_order_num || 0}}">{{vm.allData.total_order_num || 0}}</td>
+              <td ng-cloak class="list-width" title="{{vm.allData.total_order_price | formatMoneyFromFENToYUAN}}">{{vm.allData.total_order_price | formatMoneyFromFENToYUAN}}</td>
+              <td ng-cloak class="list-width" title="{{vm.allData.success_order_num || 0}}">{{vm.allData.success_order_num || 0}}</td>
+              <td ng-cloak class="list-width" title="{{vm.allData.success_order_price | formatMoneyFromFENToYUAN}}">{{vm.allData.success_order_price | formatMoneyFromFENToYUAN}}</td>
+              <td ng-cloak class="list-width" title="{{vm.allData.cancel_order_num || 0}}">{{vm.allData.cancel_order_num || 0}}</td>
+              <td ng-cloak class="list-width" title="{{vm.allData.cancel_order_price | formatMoneyFromFENToYUAN}}">{{vm.allData.cancel_order_price | formatMoneyFromFENToYUAN}}</td>
+              <td ng-cloak class="list-width" title="{{vm.allData.unsubscribe_order_num || 0}}">{{vm.allData.unsubscribe_order_num || 0}}</td>
+              <td ng-cloak class="list-width" title="{{vm.allData.unsubscribe_order_price | formatMoneyFromFENToYUAN}}">{{vm.allData.unsubscribe_order_price | formatMoneyFromFENToYUAN}}</td>
+            </tr>
+            <tr ng-repeat="x in vm.dataList">
+              <td ng-cloak class="list-width" title="{{x.branchName}}">{{x.branchName}}</td>
+              <td ng-cloak ng-if="vm.currentSession == 1" class="list-width" title="{{x.brokerName}}">{{x.brokerName}}</td>
+              <td ng-cloak class="list-width" title="{{x.serviceType}}">{{x.serviceType || ''}}</td>
+              <td ng-cloak class="list-width" title="{{x.orderNum}}">{{x.orderNum || ''}}</td>
+              <td ng-cloak class="list-width" title="{{x.orderPrice | formatMoneyFromFENToYUAN}}">{{x.orderPrice | formatMoneyFromFENToYUAN}}</td>
+              <td ng-cloak class="list-width" title="{{x.orderTradeNum}}">{{x.orderTradeNum || ''}}</td>
+              <td ng-cloak class="list-width" title="{{x.orderTradePrice | formatMoneyFromFENToYUAN}}">{{x.orderTradePrice | formatMoneyFromFENToYUAN}}</td>
+              <td ng-cloak class="list-width" title="{{x.orderCancelNum || ''}}">{{x.orderCancelNum || ''}}</td>
+              <td ng-cloak class="list-width" title="{{x.orderCancelPrice | formatMoneyFromFENToYUAN}}">{{x.orderCancelPrice | formatMoneyFromFENToYUAN}}</td>
+              <td ng-cloak class="list-width" title="{{x.orderBackNum || ''}}">{{x.orderBackNum || ''}}</td>
+              <td ng-cloak class="list-width" title="{{x.orderBackPrice | formatMoneyFromFENToYUAN}}">{{x.orderBackPrice | formatMoneyFromFENToYUAN}}</td>
+            </tr>
+            </tbody>
+          </table>
+          <small class="null-data" ng-if="!vm.dataList.length">暂无数据</small>
+          <div class="cloud-ui-pagination">
+            <ul
+              uib-pagination
+              ng-model="vm.currentPage"
+              items-per-page="vm.itemPerPage"
+              total-items="vm.totalItems"
+              max-size="5"
+              boundary-links="false"
+              boundary-link-numbers="true"
+              previous-text="上一页"
+              ng-change="vm.pageChangeFunc();"
+              next-text="下一页"
+            ></ul>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

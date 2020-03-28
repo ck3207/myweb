@@ -1,0 +1,71 @@
+<div class="module-page">
+  <div class="module-body customer-contribution-qry">
+    <form role="form" class="form-base">
+      <div class="form-title form-group">
+        <span class="form-header header-line"></span><span class="form-header header-title">客户列表</span>
+        <div if-show-ele="140" class="search-item">
+          <div class="input-group input-normal">
+            <input type="text" class="form-control" placeholder="请输入" ng-model="vm.keyword" />
+            <span class="input-group-btn" ng-click="vm.searchFunc();">
+              <i class="icon icon-seek"></i>
+            </span>
+          </div>
+        </div>
+        <button type="button" class="btn-normal btn-blue btn-right" ng-click="vm.download();">导出</button>
+      </div>
+      <div class="form-group min-table table-responsive">
+        <table class="table cloud-ui-table">
+          <thead>
+            <tr>
+              <th class="list-width">客户名称</th>
+              <th class="list-width">客户手机号</th>
+              <th class="list-width">
+                <button class="btn-sequence" ng-click="vm.sequenceFunc(0)">累计消费金额<i class="icon icon-paixu"></i></button>
+              </th>
+              <th class="list-width">
+                <button class="btn-sequence" ng-click="vm.sequenceFunc(1)">累计购买组合总数<i class="icon icon-paixu"></i></button>
+              </th>
+              <th class="list-width">
+                <button class="btn-sequence" ng-click="vm.sequenceFunc(2)">累计提问数<i class="icon icon-paixu"></i></button>
+              </th>
+              <th class="list-width">
+                <button class="btn-sequence" ng-click="vm.sequenceFunc(3)">累计购买观点数<i class="icon icon-paixu"></i></button>
+              </th>
+              <th class="list-width">累计购买量化模型数</th>
+              <th class="list-width">累计购买智能策略数</th>
+              <!-- <th class="list-width">所属机构</th> -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="x in vm.customerList">
+              <td class="list-width">{{x.name}}</td>
+              <td class="list-width">{{x.phone}}</td>
+              <td class="list-width">{{x.total_spend | formatMoneyFromFENToYUAN}}</td>
+              <td class="list-width">{{x.buy_combine_num}}</td>
+              <td class="list-width">{{x.buy_ask_num}}</td>
+              <td class="list-width">{{x.buy_viewpoint_msg_num}}</td>
+              <td class="list-width">{{x.buy_formula_num}}</td>
+              <td class="list-width">{{x.buy_strategy_num}}</td>
+              <!-- <td class="list-width">{x.branch_name}</td> -->
+            </tr>
+          </tbody>
+        </table>
+        <small class="null-data" ng-if="!vm.customerList.length">暂无数据</small>
+        <div class="cloud-ui-pagination">
+          <ul
+            uib-pagination
+            ng-model="vm.currentPage"
+            items-per-page="vm.itemPerPage"
+            total-items="vm.totalItems"
+            max-size="5"
+            boundary-links="false"
+            boundary-link-numbers="true"
+            previous-text="上一页"
+            ng-change="vm.pageChangeFunc();"
+            next-text="下一页"
+          ></ul>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

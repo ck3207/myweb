@@ -1,0 +1,147 @@
+<div class="module-page">
+  <div class="module-body combine-check">
+    <form role="form" class="form-base">
+      <div class="form-title form-group">
+        <button class="btn-online" ng-click="vm.openCombineOnlineModalFunc();">组合上下架</button>
+        <button class="btn-search" ng-click="vm.combineCheckSearch('');">查询</button>
+        <div class="input-item combine-right">
+          <div class=" input-normal">
+            <input type="text" class="form-control" ng-model="vm.combiCheckKey" placeholder="输入组合名称">
+          </div>
+        </div>
+      </div>
+      <div class="table-content row">
+        <div class="table-list col-sm-6 left">
+          <table class="content-list">
+            <thead>
+            <tr class="table-title">
+              <th class="list-width list-twenty">组合名称</th>
+              <th class="list-width list-twenty">风险等级</th>
+              <th class="list-width list-twenty">所属店铺</th>
+              <th class="list-width list-twenty">创建人</th>
+              <th class="list-width list-twenty">
+                <div class="selected-block" uib-dropdown keyboard-nav>
+                  <button id="simple-btn-keyboard-nav" type="button" class="form-control" uib-dropdown-toggle>
+                    <span>审核状态</span>
+                    <i class="icon icon-pull-down"></i>
+                  </button>
+                  <ul class="dropdown-menu select-dropdown" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                    <li role="menuitem" ng-repeat="item in vm.typeList" ng-click="vm.combineCheckSearch(item.code);"><a class="select-list">{{item.value}}</a></li>
+                  </ul>
+                </div>
+              </th>
+              <th class="list-arr"></th>
+            </tr>
+            </thead>
+            <tbody class="main-list">
+            <tr class="list" ng-class="{'selected': $index == vm.selectedData}" ng-repeat="x in vm.combineCheckList"
+                id="combineCheck{{$index}}"
+                ng-click="vm.setDetail($index)">
+              <td class="list-width list-twenty" ng-cloak title="{{x.combi_name}}">{{x.combi_name}}</td>
+              <td class="list-width list-twenty" ng-cloak title="R{{x.prodrisk_level}}{{vm.riskLevel[x.prodrisk_level]}}">R{{x.prodrisk_level}}{{vm.riskLevel[x.prodrisk_level]}}</td>
+              <td class="list-width list-twenty" title="{{x.branch_name}}">{{x.branch_name}}
+              </td>
+              <td class="list-width list-twenty" title="{{x.client_name}}">{{x.client_name}}</td>
+              <td class="list-width list-twenty" ng-class="{colorRed: x.verify_status == '审核不通过', colorGreen: x.verify_status == '审核通过'}" title="{{x.verify_status}}">{{x.verify_status}}</td>
+              <td class="arr"></td>
+            </tr>
+            </tbody>
+          </table>
+          <small class="null-data" ng-if="!vm.combineCheckList.length>0">暂无数据</small>
+          <div class="cloud-ui-pagination">
+            <ul uib-pagination
+                ng-model="vm.currentPage"
+                items-per-page="vm.itemPerPage"
+                total-items="vm.totalItems"
+                max-size="vm.maxSize"
+                boundary-links="false"
+                boundary-link-numbers="true"
+                previous-text="上一页"
+                ng-change="vm.pageChangeFunc();"
+                next-text="下一页">
+            </ul>
+          </div>
+        </div>
+        <div class="table-detail col-sm-6 right">
+          <div class="table-gray"></div>
+          <div class="detail-content">
+            <div class="combine-title">
+              <img ng-src="{{vm.passImg}}" alt="审核通过" ng-if="vm.combiCheckDetail.verify_status == '审核通过'">
+              <img ng-src="{{vm.noPassImg}}" alt="未通过" ng-if="vm.combiCheckDetail.verify_status == '审核不通过'">
+              <h4>{{vm.combiCheckDetail.combi_name || '--'}}</h4>
+            </div>
+            <div class="client-info row">
+              <div class="input-item col-sm-6">
+                <label class="control-label label-normal">组合风格：</label>
+                <span>{{vm.combiCheckDetail.invest_style || "--"}}</span>
+              </div>
+              <div class="input-item col-sm-6">
+                <label class="control-label label-normal">创建人：</label>
+                <span>{{vm.combiCheckDetail.client_name || "--"}}</span>
+              </div>
+            </div>
+            <div class="client-info row">
+              <div class="input-item col-sm-6">
+                <label class="control-label label-normal">风险等级：</label>
+                <span>R{{vm.combiCheckDetail.prodrisk_level}}{{vm.riskLevel[vm.combiCheckDetail.prodrisk_level]}}</span>
+              </div>
+              <div class="input-item col-sm-6">
+                <label class="control-label label-normal">预设价格：</label>
+                <span>{{vm.combiCheckDetail.fare_per_month_str || "--"}}元/月</span>
+              </div>
+            </div>
+            <div class="client-info row">
+              <div class="input-item col-sm-6">
+                <label class="control-label label-normal">所属营业部：</label>
+                <span>{{vm.combiCheckDetail.branch_name || "--"}}</span>
+              </div>
+            </div>
+            <div class="client-list">
+              <h4>组合介绍</h4>
+              <div class="client-content">
+                {{vm.combiCheckDetail.summary}}
+              </div>
+            </div>
+            <div class="client-list table-responsive">
+              <h4>创建时间</h4>
+              <span class="detail-more" ng-click="vm.subscribeMore(vm.selectedData);">{{vm.combiCheckDetail.apply_date || ''}}&nbsp;&nbsp;{{ vm.combiCheckDetail.apply_time ? (vm.combiCheckDetail.apply_time | formatStrToTime): '' }}</span>
+            </div>
+            <div class="client-list table-responsive">
+              <h4>审核历史</h4>
+              <div ng-class="{'history': vm.showTable == false && vm.combiApplyHisList.length > 4}" class="combiHis">
+                <table class="table">
+                  <thead class="combiHis-table combiHis-height color">
+                  <tr class="combiHis-table">
+                    <th class="list-width list-forty">审核人</th>
+                    <th class="list-width list-twenty">审核状态</th>
+                    <th class="list-width list-forty">审核时间</th>
+                  </tr>
+                  </thead>
+                  <tbody class="combiHis-table">
+                  <tr class="combiHis-table hisPoint" ng-class="{'selectedhis': $index == vm.selectedHis}" ng-repeat="x in vm.combiApplyHisList track by $index" ng-click="vm.checkHisRemark($index)">
+                    <td class="list-width list-forty">{{vm.checkerList[$index]}}</td>
+                    <td class="list-width list-twenty">{{x.verify_status}}</td>
+                    <td class="list-width list-forty">{{x.curr_date}}&nbsp;&nbsp;{{x.curr_time | formatStrToTime}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <small class="click-more" ng-click="vm.showMore();" ng-show="vm.combiApplyHisList.length > 4">{{vm.showTableHis}}</small>
+            </div>
+            <div class="client-list table-responsive">
+              <h4>审核意见</h4>
+              <textarea rows="10" ng-readonly="vm.combiCheckDetail.verify_status != '未审核'" ng-model="vm.auditOpinion"></textarea>
+            </div>
+            <div class="client-search">
+              <button type="button" class="btn-normal btn-green" ng-class="{'btn-disabled': vm.combiCheckDetail.verify_status != '未审核'}"
+                      ng-click="vm.combineAudit('yes')" ng-disabled="vm.combiCheckDetail.verify_status != '未审核'">审核通过</button>
+              <button type="button" class="btn-normal btn-red" ng-class="{'btn-disabled': vm.combiCheckDetail.verify_status != '未审核'}"
+                      ng-click="vm.combineAudit('no')" ng-disabled="vm.combiCheckDetail.verify_status != '未审核'">审核不通过</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,147 @@
+<div class="module-page">
+  <div class="module-body serve-package-check">
+    <form role="form" class="form-base">
+      <div class="form-title form-group">
+        <button if-show-ele="460" class="btn-online" ng-click="vm.openModal();">服务包强制下架</button>
+        <button class="btn-search" ng-click="vm.searchByKeyword()">查询</button>
+        <div class="input-item combine-right">
+          <div class=" input-normal">
+            <input type="text" class="form-control" ng-model="vm.keywords" placeholder="输入服务包名称">
+          </div>
+        </div>
+      </div>
+      <div class="table-content row">
+        <div class="table-list col-sm-6 left">
+          <table class="table cloud-ui-table content-list">
+            <thead>
+              <tr>
+                <th class="list-width">服务包名称</th>
+                <th class="list-width">创建人</th>
+                <th class="list-width">创建时间</th>
+                <th class="list-width">当前产品状态</th>
+                <!-- <th class="list-width">审核人</th>
+                <th class="list-width">审核时间</th> -->
+                <th class="list-width">
+                  <div class="selected-block" uib-dropdown keyboard-nav>
+                    <button id="simple-btn-keyboard-nav" type="button" uib-dropdown-toggle>
+                      <span>审核状态</span>
+                      <i class="icon icon-pull-down"></i>
+                    </button>
+                    <ul class="dropdown-menu select-dropdown" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                      <li role="menuitem" ng-repeat="item in vm.typeList" ng-click="vm.auditCheckSearch(item.code);"><a class="select-list">{{item.value}}</a></li>
+                    </ul>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="x in vm.list" ng-class="{'selected': $index == vm.selectedIndex}" ng-click="vm.showProductDetailsFunc($index)">
+                <td class="list-width">{{x.product_name}}</td>
+                <td class="list-width">{{x.broker_name}}</td>
+                <td class="list-width">{{x.create_time | timeStampToDate}}</td>
+                <td class="list-width">{{x.product_state | productStateFilter}}</td>
+                <!-- <td class="list-width">{{x.operator_name}}</td>
+                <td class="list-width">{{x.operate_time | timeStampToDate}}</td> -->
+                <td class="list-width" ng-class="{colorRed: x.operate_content == 2, colorGreen: x.operate_content == 1}">{{x.operate_content | productCheckStateFilter}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <small class="null-data" ng-if="!vm.list.length">暂无数据</small>
+          <div class="cloud-ui-pagination">
+            <ul
+              uib-pagination
+              ng-model="vm.currentPage"
+              items-per-page="vm.itemPerPage"
+              total-items="vm.totalItems"
+              max-size="5"
+              boundary-links="false"
+              boundary-link-numbers="true"
+              previous-text="上一页"
+              ng-change="vm.pageChangeFunc();"
+              next-text="下一页"
+            ></ul>
+          </div>
+        </div>
+        <div class="table-detail col-sm-6 right">
+          <div class="table-gray"></div>
+          <div class="detail-content">
+            <div class="product-title">
+              <img ng-src="{{vm.passImg}}" alt="审核通过" ng-if="vm.productData.operate_content == 1">
+              <img ng-src="{{vm.noPassImg}}" alt="未通过" ng-if="vm.productData.operate_content == 2">
+              <h4>{{vm.productData.product_name}}</h4>
+            </div>
+            <div class="client-info row">
+              <div class="input-item col-sm-6">
+                <label class="control-label label-normal">宝贝名称：</label>
+                <span>{{vm.productDetailData.product_name}}</span>
+              </div>
+              <div class="input-item col-sm-6">
+                <label class="control-label label-normal">价格：</label>
+                <span>{{vm.productPrice}}</span>
+              </div>
+            </div>
+            <div class="client-info row">
+              <div class="input-item col-sm-6">
+                <label class="control-label label-normal">创建时间：</label>
+                <span>{{vm.productDetailData.create_time | timeStampToDate}}</span>
+              </div>
+              <div class="input-item col-sm-6">
+                <label class="control-label label-normal">宝贝类型：</label>
+                <span>{{vm.productDetailData.viewpoint_tags[0].viewpoint_tag_name}}</span>
+              </div>
+            </div>
+            <div class="client-info row">
+              <div class="input-item col-sm-6">
+                <label class="control-label label-normal">状态：</label>
+                <span>{{vm.productDetailData.product_state | productStateFilter}}</span>
+              </div>
+              <div class="input-item col-sm-6">
+                <label class="control-label label-normal">创建者：</label>
+                <span>{{vm.productDetailData.broker_name}}</span>
+              </div>
+            </div>
+            <div class="client-list table-responsive">
+              <h4>审核历史</h4>
+              <div class="combiHis">
+                <table class="table">
+                  <thead class="combiHis-table combiHis-height color">
+                  <tr class="combiHis-table">
+                    <th class="list-width list-forty">审核人</th>
+                    <th class="list-width list-twenty">审核状态</th>
+                    <th class="list-width list-forty">审核时间</th>
+                  </tr>
+                  </thead>
+                  <tbody class="combiHis-table">
+                  <tr class="combiHis-table hisPoint" ng-click="vm.chooseAuditHis();">
+                    <td class="list-width list-forty">{{vm.productData.operator_name || ''}}</td>
+                    <td class="list-width list-twenty">{{vm.productData.operate_content | productCheckStateFilter}}</td>
+                    <td class="list-width list-forty">{{vm.productData.operate_time | timeStampToDate}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="client-list table-responsive">
+              <h4>审核意见</h4>
+              <textarea rows="10" ng-readonly="vm.productData.operate_content != '0'" ng-model="vm.auditOpinion"></textarea>
+            </div>
+            <div class="client-search" if-show-ele="463">
+              <button type="button" 
+                      class="btn-normal btn-green" 
+                      ng-class="{'btn-disabled': vm.productData.operate_content != '0', 'btn-clicked': vm.clickAble == 1}"
+                      ng-click="vm.productCheckFunc(1)" 
+                      ng-disabled="vm.productData.operate_content != '0' || vm.clickAble == 1"
+                      ng-bind-html="vm.checkOKText">审核通过</button>
+              <button type="button" 
+                      class="btn-normal btn-red" 
+                      ng-class="{'btn-disabled': vm.productData.operate_content != '0', 'btn-clicked': vm.clickAble == 2}"
+                      ng-click="vm.productCheckFunc(2)" 
+                      ng-disabled="vm.productData.operate_content != '0' || vm.clickAble == 2"
+                      ng-bind-html="vm.checkNOText">审核不通过</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

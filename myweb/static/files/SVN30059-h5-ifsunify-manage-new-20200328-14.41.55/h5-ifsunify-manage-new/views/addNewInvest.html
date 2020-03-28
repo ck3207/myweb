@@ -1,0 +1,312 @@
+<div class="module-page">
+  <div class="module-body add-new-invest">
+    <form class="form-base" name="addNewInvestForm">
+      <div class="form-title">
+        <span class="form-header header-line"></span><span class="form-header header-title">{{vm.title}}</span>
+      </div>
+      <h4>个人基本信息</h4>
+      <div class="form-group">
+        <div class="input-item">
+          <label for="inputApplicantName" class="control-label label-normal"><em>*</em>申请人姓名：</label>
+          <div class="input-normal">
+            <input type="text" name="applicantName" id="inputApplicantName" class="form-control" ng-model="vm.params.applicantName" required>
+          </div>
+          <div class="error-tips" ng-messages="addNewInvestForm.applicantName.$error" ng-show="addNewInvestForm.applicantName.$touched">
+            <p class="error" ng-message="required">请输入正确的名字</p>
+          </div>
+        </div>
+        <div class="input-item">
+          <label for="inputIDNo" class="control-label label-normal">身份证号码：</label>
+          <div class="input-normal">
+            <input type="text" name="IDNo" id="inputIDNo" class="form-control" ng-model="vm.params.idCardNo" maxlength="18" required>
+          </div>
+          <!--<div class="error-tips" ng-messages="addNewInvestForm.IDNo.$error" ng-show="addNewInvestForm.IDNo.$touched">-->
+            <!--<p class="error" ng-message="required">请输入正确的身份证号码</p>-->
+          <!--</div>-->
+        </div>
+        <div class="input-item">
+          <label for="inputWeiboNo" class="control-label label-normal">微博号：</label>
+          <div class="input-normal">
+            <input type="text" id="inputWeiboNo" class="form-control" ng-model="vm.params.weiboNo">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-item">
+          <label class="control-label label-normal">微信账户主体：</label>
+          <div class="input-normal">
+            <select class="form-control" ng-model="vm.params.weixinOwner">
+              <option value="0">个体</option>
+              <option value="1">企业</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-item">
+          <label for="inputWeixinNo" class="control-label label-normal">微信公众号：</label>
+          <div class="input-normal">
+            <input type="text" name="weixinNo" id="inputWeixinNo" class="form-control" ng-model="vm.params.weixinNo" required>
+          </div>
+        </div>
+        <div class="input-item">
+          <label for="inputQQNo" class="control-label label-normal">QQ号：</label>
+          <div class="input-normal">
+            <input type="text" id="inputQQNo" class="form-control" maxlength="15" ng-model="vm.params.qqNo">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <!-- <div class="input-item">
+          <label for="inputNickName" class="control-label label-normal"><em>*</em>用户昵称：</label>
+          <div class="input-normal">
+            <input type="text" name="nickName" id="inputNickName" class="form-control" ng-model="vm.params.aliasName" required>
+          </div>
+          <div class="error-tips" ng-messages="addNewInvestForm.nickName.$error" ng-show="addNewInvestForm.nickName.$touched">
+            <p class="error" ng-message="required">请输入昵称</p>
+          </div>
+        </div> -->
+        <div class="input-item">
+          <label for="inputMobile" class="control-label label-normal"><em>*</em>手机号：</label>
+          <div class="input-normal">
+            <input type="text" name="mobile" id="inputMobile" class="form-control" ng-model="vm.params.mobile" maxlength="11" required>
+          </div>
+          <div class="error-tips" ng-messages="addNewInvestForm.mobile.$error" ng-show="addNewInvestForm.mobile.$touched">
+            <p class="error" ng-message="required">请输入正确的手机号</p>
+          </div>
+        </div>
+        <div class="input-item" ng-if="vm.qryType == 0">
+          <label for="inputPassword" class="control-label label-normal"><em>*</em>请输入密码：</label>
+          <div class="input-normal">
+            <input type="password" name="password" id="inputPassword" class="form-control" ng-model="vm.password" ng-minlength="6" maxlength="16" required>
+          </div>
+          <div class="error-tips" ng-messages="addNewInvestForm.password.$error" ng-show="addNewInvestForm.password.$touched">
+            <p class="error" ng-message="required && minlength && maxlength">密码限制6-16位数字字母组合</p>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" ng-if="vm.qryType == 0">
+        <div class="input-item">
+          <label for="input10" class="control-label label-normal"><em>*</em>重新输入密码：</label>
+          <div class="input-normal">
+            <input type="password" name="surePwd" id="input10" class="form-control" ng-model="vm.surePwd" ng-minlength="6" maxlength="16" required>
+          </div>
+          <div class="error-tips" ng-messages="addNewInvestForm.surePwd.$error" ng-show="addNewInvestForm.surePwd.$touched">
+            <p class="error" ng-message="required && minlength && maxlength">密码限制6-16位数字字母组合</p>
+          </div>
+        </div>
+      </div>
+      <h4>资质信息</h4>
+      <div class="form-group">
+        <div class="input-item">
+          <label class="control-label label-normal"><em>*</em>投顾类型：</label>
+          <div class="input-normal">
+            <!-- <select class="form-control" ng-options="item.value as item.name for item in vm.investType track by item.value" ng-model="vm.params.adviserType">
+              <option value="">--请选择--</option>
+            </select> -->
+            <select class="form-control" ng-model="vm.params.adviserType">
+              <option value="">--请选择--</option>
+              <option value="0">投资顾问助理</option>
+              <option value="1">投资顾问</option>
+              <option value="2">理财顾问</option>
+              <option value="3">高级投顾</option>
+              <option value="4">明星投顾</option>
+              <option value="5">资深投顾</option>
+              <option value="6">钻石投顾</option>
+              <option value="7">首席投顾</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-item">
+          <label for="inputCredentialsNo" class="control-label label-normal"><em>*</em>资格证书号：</label>
+          <div class=" input-normal">
+            <input type="text" name="credentialsNo" id="inputCredentialsNo" class="form-control" ng-model="vm.params.credentialsNo" maxlength="20" required>
+          </div>
+          <div class="error-tips" ng-messages="addNewInvestForm.credentialsNo.$error" ng-show="addNewInvestForm.credentialsNo.$touched">
+            <p class="error" ng-message="required">专职投顾需要输入资格证书号</p>
+          </div>
+        </div>
+        <div class="input-item">
+          <label for="inputCredentialsType" class="control-label label-normal"><em>*</em>资格证书类型：</label>
+          <div class="input-normal">
+            <select class="form-control" id="inputCredentialsType" name="credentialsType" ng-model="vm.params.credentialsType">
+              <option value="">--请选择--</option>
+              <option value="1">一般证券业务</option>
+              <option value="2">证券投资咨询业务</option>
+              <option value="3">证券经纪业务营销</option>
+              <option value="4">证券经纪人</option>
+              <option value="5">分析师</option>
+              <option value="6">投资顾问</option>
+              <option value="7">保荐代表人</option>
+              <option value="8">投资主办人</option>
+            </select>
+          </div>
+          <div class="error-tips" ng-messages="addNewInvestForm.credentialsType.$error" ng-show="addNewInvestForm.credentialsType.$touched">
+            <p class="error" ng-message="required">专职投顾需要输入资格证书类型</p>
+          </div>
+        </div>
+      </div>
+      <h4>公司信息</h4>
+      <div class="form-group">
+        <div class="input-item">
+          <label for="inputCompanyName" class="control-label label-normal">公司名称：</label>
+          <div class=" input-normal">
+            <input type="text" id="inputCompanyName" class="form-control" ng-model="vm.params.companyName" maxlength="30">
+          </div>
+        </div>
+        <div class="input-item">
+          <label for="inputProvinceName" class="control-label label-normal">所在省：</label>
+          <div class=" input-normal">
+            <input type="text" id="inputProvinceName" class="form-control" ng-model="vm.params.provinceName">
+          </div>
+        </div>
+        <div class="input-item">
+          <label for="inputReferralCode" class="control-label label-normal">推荐码：</label>
+          <div class=" input-normal">
+            <input type="text" id="inputReferralCode" class="form-control" ng-model="vm.params.referralCode" maxlength="20">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-item">
+          <label for="inputEmployeeNo" class="control-label label-normal">员工编号：</label>
+          <div class=" input-normal">
+            <input type="text" id="inputEmployeeNo" class="form-control" ng-model="vm.params.employeeNo" maxlength="20">
+          </div>
+        </div>
+        <div class="input-item">
+          <label for="inputCityName" class="control-label label-normal">所在市：</label>
+          <div class=" input-normal">
+            <input type="text" id="inputCityName" class="form-control" ng-model="vm.params.cityName" maxlength="16">
+          </div>
+        </div>
+        <div class="input-item">
+          <label for="inputBankAccount" class="control-label label-normal">银行账号：</label>
+          <div class=" input-normal">
+            <input type="text" id="inputBankAccount" class="form-control" ng-model="vm.params.bankAccount" maxlength="19">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-item">
+          <label for="inputWorkingYear" class="control-label label-normal"><em>*</em>从业年限：</label>
+          <div class=" input-normal">
+            <input type="text" name="workingYear" id="inputWorkingYear" class="form-control" ng-model="vm.params.workYear" maxlength="2" required>
+          </div>
+          <div class="error-tips" ng-messages="addNewInvestForm.workingYear.$error" ng-show="addNewInvestForm.workingYear.$touched">
+            <p class="error" ng-message="required && maxlength">请输入正确的从业年限</p>
+          </div>
+        </div>
+        <div class="input-item">
+          <label for="inputOrganization" class="control-label label-normal">所属机构：</label>
+          <div class=" input-normal">
+            <input type="text" id="inputOrganization" class="form-control" ng-model="vm.params.organization">
+          </div>
+        </div>
+        <div class="input-item">
+          <label for="inputEmailAdd" class="control-label label-normal"><em>*</em>邮箱地址：</label>
+          <div class=" input-normal">
+            <input type="text" name="emailAdd" id="inputEmailAdd" class="form-control" ng-model="vm.params.email" required>
+          </div>
+          <div class="error-tips" ng-messages="addNewInvestForm.emailAdd.$error" ng-show="addNewInvestForm.emailAdd.$touched">
+            <p class="error" ng-message="required">请输入正确的邮箱地址</p>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-item">
+          <label for="inputAccountHolder" class="control-label label-normal">开户人：</label>
+          <div class=" input-normal">
+            <input type="text" id="inputAccountHolder" class="form-control" ng-model="vm.params.accountHolder" maxlength="10">
+          </div>
+        </div>
+        <div class="input-item">
+          <label for="inputOpeningBank" class="control-label label-normal">开户行：</label>
+          <div class=" input-normal">
+            <input type="text" id="inputOpeningBank" class="form-control" ng-model="vm.params.openingBank" maxlength="30">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group group-table">
+        <div class="box-left">
+          <div class="box-title">
+            <span><em>*</em>租户：{{vm.params.tenantId}}</span>
+          </div>
+          <div class="box-content">
+            <right-tree id="branchNo"
+                        is-right-tree="false"
+                        only-show-caption = "vm.showBranchId"
+                        tree-data="vm.branchData"
+                        is-change="true"
+                        show-level="1"
+                        children="children"
+                        text-field="branchNo,branchName"
+                        item-clicked="vm.getBranchItem(item);">
+            </right-tree>
+          </div>
+        </div>
+        <div class="box-right">
+          <div class="box-title">
+            <span><em>*</em>营业部：{{vm.params.branchNo}}</span>
+          </div>
+          <div class="box-content">
+            <right-tree id="branchNo"
+                        is-right-tree="false"
+                        only-show-caption = "vm.showBranchId"
+                        tree-data="vm.selectedBranchData"
+                        is-change="true"
+                        show-level="1"
+                        children="children"
+                        text-field="branchNo,branchName"
+                        item-clicked="vm.selectBranchItem(item);">
+            </right-tree>
+          </div>
+        </div>
+      </div>
+
+      <h4>其他信息</h4>
+      <div class="form-group">
+        <div class="input-item">
+          <label for="inputInvestmentStyle" class="control-label label-normal">投资风格：</label>
+          <div class=" input-normal">
+            <input type="text" id="inputInvestmentStyle" class="form-control" ng-model="vm.params.investmentStyle" maxlength="8">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-item">
+          <label for="inputInvestmentStrategy" class="control-label label-normal">投资策略：</label>
+          <div class=" input-normal">
+            <textarea class="form-control text-area" id="inputInvestmentStrategy" ng-model="vm.params.investmentStrategy" maxlength="150"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-item">
+          <label for="inputInvestmentStrategySummary" class="control-label label-normal">投资策略简述：</label>
+          <div class=" input-normal">
+            <textarea class="form-control text-area" id="inputInvestmentStrategySummary" ng-model="vm.params.investmentStrategySummary" maxlength="150"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-item">
+          <label for="inputBackgroundIntro" class="control-label label-normal">背景介绍：</label>
+          <div class=" input-normal">
+            <textarea class="form-control text-area" id="inputBackgroundIntro" ng-model="vm.params.backgroundIntro" maxlength="50"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="btn-box">
+        <button type="button" class="btn-normal bg-gray" ui-sref="home.investManage">返回</button>
+        <button 
+          type="button" 
+          class="btn-normal btn-green" 
+          ng-class="{'btn-disabled': vm.clickAble}"
+          ng-click="vm.checkForm();" 
+          ng-disabled="vm.clickAble" 
+          ng-bind-html="vm.btnText"
+        >保存</button>
+      </div>
+    </form>
+  </div>
+</div>

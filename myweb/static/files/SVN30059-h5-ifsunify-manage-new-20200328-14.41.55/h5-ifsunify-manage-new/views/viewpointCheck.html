@@ -1,0 +1,86 @@
+<div class="module-page">
+  <div class="module-body viewpoint-check">
+    <form role="form" class="form-base">
+      <div class="form-title form-group">
+        <span class="form-header header-line"></span><span class="form-header header-title">观点列表</span>
+        <p class="tip" if-show-ele="282">开启审核</p>
+        <div class="form-checkbox" if-show-ele="282">
+          <input type="checkbox" id="checkbox_0" ng-model="vm.ifOpenCheck" ng-change="vm.changeCheckStatus();"/>
+          <label for="checkbox_0"></label>
+        </div>
+        <div class="search-item" if-show-ele="280">
+          <div class="input-group input-normal">
+            <input type="text" class="form-control" placeholder="输入观点名称、观点内容、投顾名称关键字" ng-model="vm.keyword" />
+            <span class="input-group-btn" ng-click="vm.searchFunc();">
+              <i class="icon icon-seek"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group min-table table-responsive">
+        <table class="table cloud-ui-table">
+          <thead>
+            <tr>
+              <th class="list-width">观点标题</th>
+              <th class="list-width">观点类型</th>
+              <th class="list-width">观点价格</th>
+              <th class="list-width">风险等级</th>
+              <th class="list-width">所属观点包</th>
+              <th class="list-width">创建者</th>
+              <th class="list-width">创建时间</th>
+              <th class="list-width">审核业务类型</th>
+              <th class="list-width">审核状态</th>
+              <th class="list-width">审核人</th>
+              <th class="list-width">审核时间</th>
+              <th class="list-width operate">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="x in vm.viewCheckList track by $index">
+              <td class="list-width" title="{{x.view_title}}">{{x.view_title}}</td>
+              <td class="list-width" title="{{x.price < 0 ? '免费观点' : '付费观点'}}">{{x.price < 0 ? '免费观点' : '付费观点'}}</td>
+              <td class="list-width" title="{{x.price | formatVPPriceToFixed2}}">{{x.price | formatVPPriceToFixed2}}</td>
+              <td class="list-width" title="{{x.prodrisk_level | formatRiskType}}">{{x.prodrisk_level | formatRiskType}}</td>
+              <td class="list-width" title="{{x.pkg_name || '暂无'}}">{{x.pkg_name || '暂无'}}</td>
+              <td class="list-width" title="{{x.broker_name}}">{{x.broker_name}}</td>
+              <td class="list-width" title="{{x.send_time | abandonLast2}}">{{x.send_time | abandonLast2}}</td>
+              <td class="list-width" title="观点发布申请">观点发布申请</td>
+              <td class="list-width" ng-class="{colorRed: x.audit_state == 2, colorGreen: x.audit_state == 1}" title="{{x.audit_state | viewpointCheckState}}">{{x.audit_state | viewpointCheckState}}</td>
+              <td class="list-width" title="{{x.operator_name || '--'}}">{{x.operator_name || '--'}}</td>
+              <td class="list-width" title="{{x.operate_time | timeStampToTime}}" ng-if="x.audit_state != 0">{{x.operate_time | timeStampToTime}}</td>
+              <td class="list-width" title="--" ng-if="x.audit_state == 0">--</td>
+              <td class="list-width operate">
+                <a type="button" title="查看审核意见">
+                  <span class="icon icon-primary icon-check-remark bg-yellow" ng-click="vm.openViewpointRemarlModal(x.remark)"></span>
+                </a>
+                <a type="button" title="查看观点详情" >
+                  <span class="icon icon-primary icon-live-intro bg-blue" ng-click="vm.openViewpointDetailModal(x)"></span>
+                </a>
+                <a type="button" title="审核" if-show-ele="281" ng-if="x.audit_state == 0">
+                  <span class="icon icon-primary icon-passed bg-red" ng-click="vm.openViewpointCheckModal(x);"></span>
+                </a>
+                <a type="button" title="撤回" if-show-ele="285" ng-if="x.audit_state == 1">
+                  <span class="icon icon-primary icon-chehui bg-blue" ng-click="vm.withdrawViewpointFunc(x.history_id);"></span>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <small class="null-data" ng-if="!vm.viewCheckList.length">暂无数据</small>
+      </div>
+      <div class="cloud-ui-pagination">
+        <ul uib-pagination
+          ng-model="vm.currentPage"
+          items-per-page="vm.itemPerPage"
+          total-items="vm.totalItems"
+          max-size="5"
+          boundary-links="false"
+          boundary-link-numbers="true"
+          previous-text="上一页"
+          ng-change="vm.pageChangeFunc();"
+          next-text="下一页">
+        </ul>
+      </div>
+    </form>
+  </div>
+</div>

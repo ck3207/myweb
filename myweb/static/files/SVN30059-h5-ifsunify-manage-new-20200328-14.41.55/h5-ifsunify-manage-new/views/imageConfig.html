@@ -1,0 +1,91 @@
+<div class="module-page">
+  <div class="module-body imageConfig">
+    <!-- <div class="centre-head">
+      <div class="form-title col-sm-8">
+        <span class="form-header header-line"></span><span class="form-header header-title">是否开通支付功能</span>
+        <div class="form-radio">
+          <input class="radio-input-normal" type="radio" name="options" id="radio_0" ng-model="vm.openCharge" value=1
+                 ng-checked="true"/>
+          <label class="radio-label-normal" for="radio_0"></label>
+        </div>
+        <span class="radio-txt">开通</span>
+
+        <div class="form-radio">
+          <input class="radio-input-normal" type="radio" name="options" id="radio_1" value=0 ng-model="vm.openCharge" />
+          <label class="radio-label-normal" for="radio_1"></label>
+        </div>
+        <span class="radio-txt">不开通</span>
+      </div>
+      <div class="image-search">
+        <button type="button" class="btn-normal btn-blue" ng-click="vm.setPayFunc();">确定</button>
+      </div>
+    </div> -->
+    <div class="centre-content">
+      <div class="form-group">
+        <div if-show-ele="193" class="input-item">
+          <label class="control-label label-normal label-fix">请选择租户：</label>
+          <div class=" input-normal">
+            <select class="form-control" ng-model="vm.selectTenant" ng-change="vm.change();"
+                    ng-options="o.tenant_id as (o.tenant_id+'&nbsp;&nbsp;&nbsp;&nbsp;'+o.tenant_name) for o in vm.tenantList">
+              <option value="">--请选择--</option>
+            </select>
+          </div>
+          <span class="input-state">格式：jpg、png、gif、bmp，大小：小于2M，尺寸：750*300</span>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="form-title col-sm-4">
+          <span class="form-header header-line"></span><span class="form-header header-title">广告页图片</span>
+        </div>
+        <div class="col-sm-8 padding-format">
+          <button if-show-ele="190" type="button" class="btn-normal btn-blue" ng-click="vm.addPicture(1)" ng-class="{'loadhide': vm.tenantList.length < 1}">新增</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="swiper-container">
+          <div class="swiper-wrapper" ng-show="vm.showAdver" ng-if="vm.pathList.length > 0 && (vm.pathList.length == vm.length)">
+            <div class="swiper-slide" ng-show="vm.pathList.length > 0" ng-repeat="x in vm.pathList track by $index" >
+              <div class="pic-delete" ng-click="vm.deleteImg($index);"><i class="icon icon-tag-close"></i></div>
+              <img onerror="this.src=''" ng-src={{x}}>
+              <span class="link-address">
+                <p title="{{vm.picList[index].page_url || ''}}">链接：<a ng-href="{{vm.picList[$index].page_url}}">{{vm.picList[$index].page_url || ''}}</a></p>
+                <i if-show-ele="192" class="icon icon-primary icon-edit bg-yellow" ng-click="vm.editPicture(2,$index)"></i>
+              </span>
+            </div>
+          </div>
+          <div class="swiper-button-prev">
+            <i class="icon icon-pre"></i>
+          </div>
+          <div class="swiper-button-next">
+            <i class="icon icon-next"></i>
+          </div>
+          <!-- 如果需要分页器 -->
+          <div class="swiper-pagination" ng-if="vm.pathList && vm.pathList.length != 0"></div>
+        </div>
+
+        <span class="input-state annotation">注：未输入链接，图片无法点击</span>
+        <!-- <div class="form-group row">
+          <div class="form-title col-sm-4">
+            <span class="form-header header-line"></span><span class="form-header header-title">Loading页图片</span>
+          </div>
+          <div class="col-sm-8 padding-format">
+            <button type="button" class="btn-normal btn-blue" ng-class="{'loadhide': (vm.showLoad == true ||  vm.tenantList.length < 1)}" ng-disabled="vm.showLoad" ng-click="vm.addPicture(3)">
+              新增
+            </button>
+          </div>
+        </div> -->
+
+        <!--轮播内容-->
+        <!-- <div class="image-carousel">
+          <div class="pic-display" ng-show="vm.showLoad">
+            <img onerror="this.src=''" ng-src={{vm.picSrc}} id="changeAdaptImg">
+          <span class="link-address">
+            <i class="icon icon-primary icon-edit bg-yellow" ng-click="vm.addPicture(4)"></i>
+          </span>
+          </div>
+        </div> -->
+      </div>
+    </div>
+    <div class="module-footer"></div>
+  </div>

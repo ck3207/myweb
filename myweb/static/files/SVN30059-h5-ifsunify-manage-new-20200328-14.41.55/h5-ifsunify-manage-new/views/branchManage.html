@@ -1,0 +1,67 @@
+<!--组织管理-->
+<div class="module-page">
+  <div class="module-body branch-manage">
+    <form role="form" class="form-base">
+      <div class="form-group save">
+        <button type="button" class="btn-normal btn-green" ng-click="vm.saveMenuChange();">保存</button>
+      </div>
+
+      <div class="form-group group-table">
+        <div class="box-left">
+          <div class="box-title">
+            <span>组织机构配置</span>
+          </div>
+          <div class="box-content">
+            <right-tree id="branchNo"
+                        only-show-caption = "vm.showBranchId"
+                        is-right-tree="false"
+                        is-change="true"
+                        branch-search = "vm.navToBranch"
+                        tree-data="vm.rightViewData"
+                        show-level="1"
+                        children="children"
+                        text-field="branchNo,branchName"
+                        item-clicked="vm.getItemClicked(item);">
+            </right-tree>
+          </div>
+          <div class="box-footer">
+            <!-- <button if-show-ele="35" type="button" class="btn-normal btn-blue" ng-click="vm.openAddBranchModalFunc();">新增</button> -->
+            <!-- <button if-show-ele="36" type="button" class="btn-normal btn-green" ng-click="vm.openModBranchModalFunc();">修改</button> -->
+            <!-- <button if-show-ele="37" type="button" class="btn-normal btn-green" ng-click="vm.openDelBranchModalFunc();">删除</button> -->
+          </div>
+        </div>
+        <div class="box-right">
+          <div class="box-title">
+            <span>菜单配置</span>
+          </div>
+          <div class="box-content">
+            <right-tree id="menuId"
+                        is-right-tree="true"
+                        tree-data="vm.modulesViewData"
+                        own-result="vm.ownResult"
+                        add-result="vm.addResult"
+                        del-result="vm.delResult"
+                        own-result-flag="true"
+                        children="children"
+                        show-level="1"
+                        text-field="menuId,menuCaption"
+                        change-right="vm.changeRight(addResult,delResult)">
+            </right-tree>
+          </div>
+          <div class="box-footer">
+            <ul class="branch-ul">
+              <li>
+                <i class="icon icon-correct icon-state"></i>已选择
+              </li>
+              <li>
+                <i class="icon icon-error icon-state"></i>未选择
+              </li>
+              <li>
+                <i class="icon icon-query icon-state"></i>有部分选择
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>

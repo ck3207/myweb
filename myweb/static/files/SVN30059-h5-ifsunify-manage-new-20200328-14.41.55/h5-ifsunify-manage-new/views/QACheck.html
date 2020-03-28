@@ -1,0 +1,68 @@
+<div class="module-page">
+  <div class="module-body QA-check">
+    <!-- 列表 -->
+    <form role="form" class="form-base">
+      <div class="form-title form-group">
+        <span class="session-title" ng-class="{'active': vm.selectTab === ''}" ng-click="vm.selectTabFunc('')">全部</span>
+        <span class="session-title" ng-class="{'active': vm.selectTab === 0}" ng-click="vm.selectTabFunc(0)">待审核</span>
+        <span class="session-title" ng-class="{'active': vm.selectTab == 1}" ng-click="vm.selectTabFunc(1)">审核已通过</span>
+        <span class="session-title" ng-class="{'active': vm.selectTab == 2}" ng-click="vm.selectTabFunc(2)">审核未通过</span>
+        <p if-show-ele="341" class="tip">开启审核</p>
+        <div if-show-ele="341" class="form-checkbox">
+          <input type="checkbox" id="checkbox_0" ng-model="vm.ifOpenCheck" ng-change="vm.changeCheckFunc();"/>
+          <label for="checkbox_0"></label>
+        </div>
+        <div class="search-item">
+          <div class="input-group input-normal">
+            <input type="text" class="form-control" placeholder="请输入问答内容关键字" ng-model="vm.keywords" />
+            <span class="input-group-btn" ng-click="vm.QACheckSearch();">
+              <i class="icon icon-seek"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+      <small class="null-data" ng-if="!vm.dataList.length">暂无数据</small>
+      <div class="list">
+        <div class="QA" ng-repeat="item in vm.dataList track by $index">
+          <div class="content">
+            <div class="question">
+              <p class="user">
+                <span>问</span>
+                <span>{{item.customer_name}}</span>
+                <span>{{item.question_create_time | timeStampToDate}}</span>
+              </p>
+              <p class="text">{{item.question_content}}</p>
+            </div>
+            <div class="answer">
+              <p class="user">
+                <span>答</span>
+                <span>{{item.broker_name}}</span>
+                <span>{{item.answer_create_time | timeStampToDate}}</span>
+              </p>
+              <p class="text" ng-bind-html="item.text"></p>
+              <div ng-repeat="x in item.img track by $index">
+                <img ng-src="{{x.link}}" alt="">
+              </div>
+              <a href="javascript:;" ng-click="vm.openQACheckDetailFunc(item)">查看更多></a>
+            </div>
+            <em class="price" ng-if="item.ask_fare">￥{{item.ask_fare}}</em>
+            <em class="result" ng-class="{'orange': item.audit_state == 0, 'blue': item.audit_state == 1, 'red': item.audit_state == 2}">{{item.audit_state | QACheckState}}</em>
+          </div>
+          <div class="operate">
+            <div class="checked" ng-if="item.audit_state != 0">
+              <p>审核人：<span>{{item.auditer_name}} {{item.audit_time}}</span> 审核业务类型：问答回复</p>
+              <p>审核意见：{{item.audit_content}}</p>
+            </div>
+            <div if-show-ele="340" class="uncheck" ng-if="item.audit_state == 0">
+              <button type="button" class="btn-normal btn-blue" ng-click="vm.openCheckOperateFunc(2, item.answer_id)">审核不通过</button>
+              <button type="button" class="btn-normal btn-blue" ng-click="vm.openCheckOperateFunc(1, item.answer_id)">审核通过</button>
+            </div>
+          </div>
+        </div>
+        <div class="bottom" ng-if="vm.moreData" ng-click="vm.nextPageFunc();">
+          <button>获取更多</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

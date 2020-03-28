@@ -1,0 +1,419 @@
+<div class="page-template">
+  <header class="template-header">
+    <h1>通用组件</h1>
+  </header>
+  <div class="template-body">
+    <!-- 表单 -->
+    <form role="form" class="form-base">
+      <!--面包屑-->
+      <h4>面包屑导航栏</h4>
+      <div>
+        <ul class="crumbs">
+          <li class="first nav-first"><a href="#"><span></span>企业管理</a></li>
+          <li class="nav-second"><a href="#">权限管理</a></li>
+          <li class="nav-third"><a href="#">组织管理</a></li>
+        </ul>
+      </div>
+
+      <ul class="breadcrumb">
+        <li><span class="module-name">企业管理</span><span class="divider">/</span></li>
+        <li><span class="module-name">权限管理</span><span class="divider">/</span></li>
+        <li class="active"><span class="module-name">组织管理</span></li>
+      </ul>
+
+      <!-- 表单标题 -->
+      <h4>表单标题</h4>
+      <div class="form-title">
+        <span class="form-header header-line"></span><span class="form-header header-title">当前表单的内容信息</span>
+      </div>
+
+      <!-- 单选框 & 复选框 -->
+      <h4>单选框 & 复选框</h4>
+      <div class="form-radio">
+        <input class="radio-input-normal" type="radio" name="options" id="radio_0"/>
+        <label class="radio-label-normal" for="radio_0"></label>
+      </div>
+      <div class="form-radio">
+        <input class="radio-input-normal" type="radio" name="options" id="radio_1"/>
+        <label class="radio-label-normal" for="radio_1"></label>
+      </div>
+      <div class="form-radio">
+        <input class="radio-input-check" type="radio" name="options" id="radio_2"/>
+        <label class="radio-label-check" for="radio_2"></label>
+      </div>
+      <div class="form-radio">
+        <input class="radio-input-check" type="radio" name="options" id="radio_3"/>
+        <label class="radio-label-check" for="radio_3"></label>
+      </div>
+      <div class="form-checkbox">
+        <input type="checkbox" id="checkbox_0"/>
+        <label for="checkbox_0"></label>
+      </div>
+      <div class="form-checkbox">
+        <input type="checkbox" id="checkbox_1"/>
+        <label for="checkbox_1"></label>
+      </div>
+
+      <!-- 输入框 -->
+      <h4>输入框</h4>
+      <div class="form-group">
+        <div class="input-item">
+          <label for="input1" class="control-label label-normal">输入框：</label>
+          <div class=" input-normal">
+            <input type="text" id="input1" class="form-control" placeholder="标准输入框">
+          </div>
+        </div>
+        <div class="input-item">
+          <label for="input2" class="control-label label-normal">输入框：</label>
+          <div class=" input-normal">
+            <input type="text" id="input2" class="form-control" placeholder="标准输入框">
+          </div>
+        </div>
+        <div class="input-item">
+          <label for="input3" class="control-label label-normal">输入框：</label>
+          <div class=" input-normal">
+            <input type="text" id="input3" class="form-control" placeholder="标准输入框">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-item">
+          <label for="input4" class="control-label label-normal"><em>*</em>标准输入框：</label>
+          <div class=" input-normal">
+            <input type="text" id="input4" class="form-control" placeholder="标准输入框">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-item">
+          <label for="input5" class="control-label label-big">输入框：</label>
+          <div class=" input-normal">
+            <input type="text" id="input5" class="form-control" placeholder="长标题输入框">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-item">
+          <label for="input6" class="control-label label-big">标准标准输入框：</label>
+          <div class=" input-normal input-error">
+            <input type="text" id="input6" class="form-control" placeholder="长标题输入框">
+            <p class="message-error pull-left">错误提示</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 搜索框 -->
+      <h4>搜索框</h4>
+      <div class="form-group">
+        <div class="search-item">
+          <div class="input-group input-normal">
+            <input type="text" class="form-control" placeholder="标准尺寸搜索框">
+            <span class="input-group-btn">
+              <i class="icon icon-seek"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 下拉列表 -->
+      <h4>下拉列表</h4>
+      <div class="form-group">
+        <div class="input-item">
+          <label for="list0" class="control-label label-normal">栅格尺寸列表：</label>
+          <div class=" input-normal">
+            <input type="text" id="list0" class="form-control" list="mydata" placeholder="下拉列表" />
+            <datalist id="mydata">
+              <option label="Top1" value="内容1">
+              <option label="Top2" value="内容2">
+              <option label="Top3" value="内容3">
+              <option label="Top4" value="内容4">
+              <option label="Top5" value="内容5">
+            </datalist>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="input-item">
+          <label class="control-label label-normal">标准尺寸列表：</label>
+          <div class=" input-normal">
+            <select class="form-control">
+              <option value="内容1">内容1</option>
+              <option value="内容2">内容2</option>
+              <option value="内容3">内容3</option>
+              <option value="内容4">内容4</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="input-item">
+          <label class="control-label label-normal">标准尺寸列表：</label>
+          <div class=" input-normal" uib-dropdown keyboard-nav>
+            <button id="simple-btn-keyboard-nav" type="button" class="form-control" uib-dropdown-toggle>
+              <span class="pd-content">{{vm.selectedContent}}</span><i class="icon icon-pull-down pd-arrow"></i>
+            </button>
+            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+              <li role="menuitem" ng-repeat="item in vm.dropdownMenu" ng-click="vm.selectItemFunc(item.item_content);"><a>{{item.item_content}}</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="input-item">
+          <label for="input25" class="control-label label-normal">多行输入框：</label>
+          <div class=" input-normal">
+            <textarea class="form-control text-area" id="input25"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- 日期选择 -->
+      <h4>日期选择</h4>
+      <div class="form-group date-height">
+        <div class="date-box">
+          <label for="startTime-select" class="col-sm-1 control-label date-label-normal">开始日期：</label>
+          <div class="col-sm-2 input-box date-input-normal">
+            <span class="date-select" ng-click="vm.openStartTimeFunc()"><i class="iconfont icon-calendar"></i></span>
+            <input class="form-control" type="text" name="startTime" id="startTime-select"
+                   uib-datepicker-popup=""
+                   ng-model="startTime"
+                   ng-required="true"
+                   is-open="vm.popupStartTimeOpened"
+                   datepicker-options="vm.dateOptions"
+                   clear-text="清除"
+                   close-text="关闭"
+                   current-text="今天"
+                   alt-input-formats="altInputFormats"
+                   ng-click="vm.openStartTimeFunc()">
+          </div>
+          <label for="endTime-select" class="col-sm-1 control-label date-label-normal">结束日期：</label>
+          <div class="col-sm-2 input-box date-input-normal">
+            <span class="date-select" ng-click="vm.openEndTimeFunc()"><i class="iconfont icon-calendar"></i></span>
+            <input class="form-control" type="text" name="endTime" id="endTime-select"
+                   uib-datepicker-popup=""
+                   ng-model="endTime"
+                   ng-required="true"
+                   is-open="vm.popupEndTimeOpened"
+                   datepicker-options="vm.dateOptions"
+                   clear-text="清除"
+                   close-text="关闭"
+                   current-text="今天"
+                   alt-input-formats="altInputFormats"
+                   ng-click="vm.openEndTimeFunc()">
+          </div>
+        </div>
+      </div>
+
+      <!-- 上传图片 -->
+      <h4>上传图片</h4>
+      <div class="form-group">
+        <div class="upload-box">
+          <label class="upload-label"><i class="icon icon-add-picture"></i></label>
+          <input type="file" class="upload-input" >
+        </div>
+      </div>
+
+      <!-- 表格 -->
+      <h4>表格</h4>
+      <table class="table cloud-ui-table">
+        <thead>
+        <tr>
+          <th>手机号</th>
+          <th>注册时间</th>
+          <th>登录次数</th>
+          <th>提问次数</th>
+          <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>
+            <span>13777777777</span>
+          </td>
+          <td>
+            <span>2017.5.19</span>
+          </td>
+          <td>
+            <span>3</span>
+          </td>
+          <td>
+            <span>14</span>
+          </td>
+          <td>
+            <a href="javascript:;">
+              <i class="icon icon-primary icon-reply bg-blue" title="回复"></i>
+            </a>
+            <a href="javascript:;">
+              <i class="icon icon-primary icon-reply bg-gray disabled" title="回复"></i>
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span>13777777777</span>
+          </td>
+          <td>
+            <span>2017.5.19</span>
+          </td>
+          <td>
+            <span>3</span>
+          </td>
+          <td>
+            <span>14</span>
+          </td>
+          <td>
+            <a href="javascript:;">
+              <i class="icon icon-primary icon-reply bg-blue" title="回复"></i>
+            </a>
+            <a href="javascript:;">
+              <i class="icon icon-primary icon-reply bg-gray disabled" title="回复"></i>
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span>13777777777</span>
+          </td>
+          <td>
+            <span>2017.5.19</span>
+          </td>
+          <td>
+            <span>3</span>
+          </td>
+          <td>
+            <span>14</span>
+          </td>
+          <td>
+            <a href="javascript:;">
+              <i class="icon icon-primary icon-reply bg-blue" title="回复"></i>
+            </a>
+            <a href="javascript:;">
+              <i class="icon icon-primary icon-reply bg-gray disabled" title="回复"></i>
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span>13777777777</span>
+          </td>
+          <td>
+            <span>2017.5.19</span>
+          </td>
+          <td>
+            <span>3</span>
+          </td>
+          <td>
+            <span>14</span>
+          </td>
+          <td>
+            <a href="javascript:;">
+              <i class="icon icon-primary icon-reply bg-blue" title="回复"></i>
+            </a>
+            <a href="javascript:;">
+              <i class="icon icon-primary icon-reply bg-green" title="回复"></i>
+            </a>
+            <a href="javascript:;">
+              <i class="icon icon-primary icon-reply bg-yellow" title="回复"></i>
+            </a>
+            <a href="javascript:;">
+              <i class="icon icon-primary icon-reply bg-gray disabled" title="回复"></i>
+            </a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <!--详情展示列表-->
+      <div class="demo-table">
+        <div class="table-content">
+          <div class="table-list col-sm-6">
+            <table class="content-list">
+              <thead>
+              <tr class="table-title">
+                <th class="col-sm-3">组合名称</th>
+                <th class="col-sm-3">所属营业部</th>
+                <th class="col-sm-3">创建人</th>
+                <th class="col-sm-3">审核状态</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody class="main-list">
+              <tr class="list selected">
+                <td class="col-sm-3">1111</td>
+                <td class="col-sm-3">1111</td>
+                <td class="col-sm-3">1111</td>
+                <td class="col-sm-3">1111</td>
+                <td class="arr"></td>
+              </tr>
+              <tr class="list">
+                <td class="col-sm-3">1111</td>
+                <td class="col-sm-3">1111</td>
+                <td class="col-sm-3">1111</td>
+                <td class="col-sm-3">1111</td>
+                <td class="arr"></td>
+              </tr>
+              <tr class="list">
+                <td class="col-sm-3">1111</td>
+                <td class="col-sm-3">1111</td>
+                <td class="col-sm-3">1111</td>
+                <td class="col-sm-3">1111</td>
+                <td class="arr"></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-detail col-sm-6">
+            <div class="table-gray"></div>
+            <div class="detail-content">
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 按钮 -->
+      <h4>按钮</h4>
+      <button type="button" class="btn-disabled">禁用</button>
+      <button type="button" class="btn-normal btn-blue">按键</button>
+      <button type="button" class="btn-normal btn-green">按键</button>
+      <button type="button" class="btn-big btn-red">按键</button>
+
+      <!-- Popover -->
+      <h4>Popover</h4>
+      <button type="button" class="btn-big bg-blue"
+              uib-popover-html="vm.htmlPopover"
+              popover-placement="bottom"
+              popover-trigger="'mouseenter'">Popover</button>
+
+      <!-- Modal -->
+      <h4>Modal</h4>
+      <button class="btn-big bg-green" type="button" ng-click="vm.openTemplateModalFunc();">Modal</button>
+
+      <!-- Toaster -->
+      <h4>Toaster</h4>
+      <button class="btn-big bg-green" type="button" ng-click="vm.openAlertFunc();">Toaster</button>
+
+      <!-- 分页 -->
+      <h4>分页</h4>
+      <div class="cloud-ui-pagination">
+        <ul uib-pagination
+            ng-model="vm.currentPage"
+            items-per-page="vm.itemPerPage"
+            total-items="vm.totalItems"
+            max-size="vm.maxSize"
+            boundary-links="false"
+            boundary-link-numbers="true"
+            previous-text="上一页"
+            ng-change="vm.pageChangeFunc();"
+            next-text="下一页">
+        </ul>
+      </div>
+
+
+
+    </form>
+  </div>
+  <footer class="template-footer"></footer>
+</div>

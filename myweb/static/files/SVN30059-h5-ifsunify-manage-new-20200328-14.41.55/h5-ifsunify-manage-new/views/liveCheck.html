@@ -1,0 +1,81 @@
+<div class="module-page">
+  <div class="module-body live-check">
+    <form role="form" class="form-base">
+      <div class="form-title form-group">
+        <span class="form-header header-line"></span><span class="form-header header-title">直播审核列表</span>
+        <div class="search-item" if-show-ele="480">
+          <div class="input-group input-normal">
+            <input type="text" class="form-control" placeholder="请输入关键字" ng-model="vm.keywords" />
+            <span class="input-group-btn" ng-click="vm.searchFunc();">
+              <i class="icon icon-seek"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group min-table table-responsive">
+        <table class="table cloud-ui-table">
+          <thead>
+            <tr>
+              <th class="list-width">直播话题</th>
+              <th class="list-width">直播开始时间</th>
+              <th class="list-width">直播结束时间</th>
+              <th class="list-width">直播人</th>
+              <th class="list-width">审核业务类型</th>
+              <th class="list-width">
+                <div class="selected-block" uib-dropdown keyboard-nav>
+                  <button id="simple-btn-keyboard-nav" type="button" uib-dropdown-toggle>
+                    <span>审核状态</span>
+                    <i class="icon icon-pull-down"></i>
+                  </button>
+                  <ul class="dropdown-menu select-dropdown" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                    <li role="menuitem" ng-repeat="item in vm.typeList" ng-click="vm.selectedTypeFunc(item.value);"><a class="select-list">{{item.name}}</a></li>
+                  </ul>
+                </div>
+              </th>
+              <th class="list-width">审核操作人</th>
+              <th class="list-width">审核时间</th>
+              <th class="list-width">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="x in vm.dataList">
+              <td ng-cloak class="list-width" title="{{x.topic_title}}">{{x.topic_title}}</td>
+              <td ng-cloak class="list-width" title="{{x.start_time | timeStampToTime}}">{{x.start_time | timeStampToTime}}</td>
+              <td ng-cloak class="list-width" title="{{x.end_time | timeStampToTime}}">{{x.end_time | timeStampToTime}}</td>
+              <td ng-cloak class="list-width" title="{{x.broker_name}}">{{x.broker_name}}</td>
+              <td ng-cloak class="list-width" title="{{x.apply_type | formatLiveCheckType}}">{{x.apply_type | formatLiveCheckType}}</td>
+              <td ng-cloak class="list-width" title="{{x.audit_state | combineCheckStateCopy}}" ng-class="{colorGreen: x.audit_state == 1, colorRed: x.audit_state == 2}">{{x.audit_state | combineCheckStateCopy}}</td>
+              <td ng-cloak class="list-width" title="{{x.operator_name}}">{{x.operator_name}}</td>
+              <td ng-cloak class="list-width" title="{{x.operate_time | timeStampToTime}}">{{x.operate_time | timeStampToTime}}</td>
+              <td ng-cloak class="list-width">
+                <a type="button" button-rights="24" title="查看审核意见" ng-click="vm.openCheckRemarkModalFunc(x.remark);">
+                  <span class="icon icon-primary icon-check-remark bg-yellow"></span>
+                </a>
+                <a type="button" button-rights="22" title="查看直播说明" ng-click="vm.openLiveIntroModalFunc(x.topic_abstract);">
+                  <span class="icon icon-primary icon-live-intro bg-blue"></span>
+                </a>
+                <a if-show-ele="481" ng-if="x.audit_state == 0" type="button" button-rights="23" title="审核" ng-click="vm.openLiveCheckModalFunc(x);">
+                  <span class="icon icon-primary icon-passed bg-red"></span>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <small class="null-data" ng-if="!vm.dataList.length">暂无数据</small>
+        <div class="cloud-ui-pagination">
+          <ul uib-pagination
+            ng-model="vm.currentPage"
+            items-per-page="vm.itemPerPage"
+            total-items="vm.totalItems"
+            max-size="5"
+            boundary-links="false"
+            boundary-link-numbers="true"
+            previous-text="上一页"
+            ng-change="vm.pageChangeFunc();"
+            next-text="下一页">
+          </ul>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

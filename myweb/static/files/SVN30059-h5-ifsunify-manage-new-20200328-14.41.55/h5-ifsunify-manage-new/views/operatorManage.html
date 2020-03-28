@@ -1,0 +1,102 @@
+<div class="module-page">
+  <div class="module-body operator-manage">
+    <form role="form" class="form-base first-line">
+      <div class="form-group">
+        <div class="input-item content-top">
+          <label for="input1" class="control-label label-normal">操作员编号：</label>
+
+          <div class=" input-normal">
+            <input type="text" id="input1" class="form-control" placeholder="请输入" ng-model="vm.operator_code">
+          </div>
+        </div>
+        <div class="input-item">
+          <label for="input2" class="control-label label-normal">操作员姓名：</label>
+
+          <div class="input-normal">
+            <input type="text" id="input2" class="form-control" placeholder="请输入" ng-model="vm.operator_name">
+          </div>
+        </div>
+        <div class="input-item">
+          <label class="control-label label-normal">机构编码：</label>
+          <div class=" input-normal" uib-dropdown keyboard-nav>
+            <button id="simple-btn-keyboard-nav1" type="button" class="form-control" uib-dropdown-toggle>
+              <span class="pd-content">{{vm.operator_branchNo}}&nbsp;&nbsp;{{vm.operator_branchName}}</span><i class="icon icon-pull-down pd-arrow"></i>
+            </button>
+            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+              <li role="menuitem" ng-click="vm.selectBranchNoFunc('', '');"><a>请选择</a></li>
+              <li role="menuitem" ng-repeat="item in vm.dataMulList" ng-click="vm.selectBranchNoFunc(item.branchNo, item.branchName);"><a>{{item.branchNo}}&nbsp;&nbsp;{{item.branchName}}</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="search">
+          <button type="button" class="btn-normal btn-green" ng-click="vm.operatorQry();" ng-disabled="vm.isMod">查询</button>
+        </div>
+      </div>
+    </form>
+    <form role="form" class="form-base">
+      <div class="form-title">
+        <span class="form-header header-line"></span><span class="form-header header-title">操作员列表</span>
+        <span class="record-count">总记录数:</span><span ng-bind="vm.total_items"></span>
+        <div class="add-more">
+          <button if-show-ele="60" type="button" class="btn-normal btn-blue" ng-click="vm.operatorAddFunc();">新增</button>
+        </div>
+      </div>
+      <div class="form-group min-table table-responsive">
+        <table class="table cloud-ui-table">
+          <thead>
+          <tr>
+            <th class="list-width list-ten">操作员编号</th>
+            <th class="list-width list-type">操作员姓名</th>
+            <th class="list-width list-type">操作员类型</th>
+            <th class="list-width list-type">机构编码</th>
+            <th class="list-width list-ten">操作员状态</th>
+            <th class="list-width list-type">注册日期</th>
+            <th class="list-width list-twenty operatorMore">操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="x in vm.operatorList" change-tr-style id="tr{{$index}}">
+            <td ng-cloak class="list-width list-ten" title="{{x.operatorNo}}">{{x.operatorNo}}</td>
+            <td ng-cloak class="list-width list-type" title="{{x.name}}">{{x.name}}</td>
+            <td ng-cloak class="list-width list-type">{{vm.dicts[x.operatorType-1].value}}</td>
+            <td ng-cloak class="list-width list-type" title="{{x.branch}}">{{x.branch}}</td>
+            <td ng-cloak class="list-width list-ten">{{vm.dicts_status[x.status].value}}</td>
+            <td ng-cloak class="list-width list-type">{{x.registerDay}}</td>
+            <td class="action-item list-twenty">
+              <a href="javascript:;" if-show-ele="64" ng-if = "x.status === '0' && x.operatorNo != vm.operatorInfo.operatorNo">
+                <i class="icon icon-primary icon-key bg-green" title="授权" ng-click="vm.operatorAccreditFunc(x);"></i>
+              </a>
+              <a href="javascript:;" if-show-ele="61" ng-if = "x.operatorNo != vm.operatorInfo.operatorNo">
+                <i class="icon icon-primary icon-edit bg-yellow" title="修改" ng-click="vm.operatorEditFunc(x);"></i>
+              </a>
+              <a href="javascript:;" if-show-ele="63" ng-if = "x.status === '0' && x.operatorNo != vm.operatorInfo.operatorNo">
+                <i class="icon icon-primary icon-lock bg-gray" title="冻结" ng-click="vm.operatorFrozenFunc(x);"></i>
+              </a>
+              <a href="javascript:;"  ng-if = "x.status === '1' && x.operatorNo != vm.operatorInfo.operatorNo">
+                <i class="icon icon-primary icon-deblocking bg-red" title="解冻" ng-click="vm.operatorUnFrozenFunc(x)"></i>
+              </a>
+              <a href="javascript:;" if-show-ele="62" ng-if = "x.operatorNo != vm.operatorInfo.operatorNo">
+                <i class="icon icon-primary icon-delete bg-blue" title="删除" ng-click="vm.operatorDeleteFunc(x);"></i>
+              </a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <small class="null-data" ng-if="!vm.operatorList.length>0">暂无数据</small>
+        <div class="cloud-ui-pagination">
+          <ul uib-pagination
+              ng-model="vm.currentPage"
+              items-per-page="vm.itemPerPage"
+              total-items="vm.total_items"
+              max-size="vm.maxSize"
+              boundary-links="false"
+              boundary-link-numbers="true"
+              previous-text="上一页"
+              ng-change="vm.pageChangeFunc();"
+              next-text="下一页">
+          </ul>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

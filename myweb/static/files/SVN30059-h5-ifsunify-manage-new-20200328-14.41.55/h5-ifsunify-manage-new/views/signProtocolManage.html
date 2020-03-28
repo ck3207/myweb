@@ -1,0 +1,159 @@
+<div class="module-page">
+  <div class="module-body sign-protocol-manage">
+    <form role="form" class="form-base">
+      <div class="form-group">
+        <div class="input-item">
+          <label class="control-label label-normal">客户名称：</label>
+          <div class=" input-normal">
+            <input type="text" class="form-control" ng-model="vm.customName">
+          </div>
+        </div>
+        <div class="input-item">
+          <label class="control-label label-normal">客户手机号：</label>
+          <div class=" input-normal">
+            <input type="text" class="form-control" ng-model="vm.customMobile">
+          </div>
+        </div>
+        <div class="input-item">
+          <label class="control-label label-normal">订单号：</label>
+          <div class=" input-normal">
+            <input type="text" class="form-control" ng-model="vm.orderId">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-item">
+          <label class="control-label label-normal">产品类型：</label>
+          <div class=" input-normal">
+            <select class="form-control" ng-model="vm.productType" ng-options="x.value as x.label for x in vm.dictsProductType"></select>
+          </div>
+        </div>
+        <div class="input-item">
+          <label class="control-label label-normal">产品名称：</label>
+          <div class=" input-normal">
+            <input type="text" class="form-control" ng-model="vm.productName">
+          </div>
+        </div>
+        <div class="input-item">
+          <label class="control-label label-normal">协议类型：</label>
+          <div class=" input-normal">
+            <select class="form-control" ng-model="vm.protocolType" ng-options="x.value as x.label for x in vm.dictsProtocolType"></select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-item">
+          <label class="control-label label-normal">投顾名称：</label>
+          <div class=" input-normal">
+            <input type="text" class="form-control" ng-model="vm.investorName">
+          </div>
+        </div>
+        <div class="input-item">
+          <label class="control-label label-normal">投顾手机号：</label>
+          <div class=" input-normal">
+            <input type="text" class="form-control" ng-model="vm.investorMobile">
+          </div>
+        </div>
+        <div class="input-item">
+          <label class="control-label label-normal">资金账号：</label>
+          <div class=" input-normal">
+            <input type="text" class="form-control" ng-model="vm.fundAccount">
+          </div>
+        </div>
+      </div>
+      <div class="form-group date-height">
+        <div class="date-box">
+          <label for="startTime-select" class="col-sm-1 control-label date-label-normal">开始日期：</label>
+          <div class="col-sm-2 input-box date-input-normal">
+            <span class="date-select" ng-click="vm.openStartTimeFunc()"><i class="iconfont icon-calendar"></i></span>
+            <input class="form-control" type="text" name="startTime" id="startTime-select"
+                   uib-datepicker-popup=""
+                   ng-model="vm.startTime"
+                   ng-required="true"
+                   is-open="vm.popupStartTimeOpened"
+                   datepicker-options="vm.dateOptions"
+                   clear-text="清除"
+                   close-text="关闭"
+                   current-text="今天"
+                   alt-input-formats="altInputFormats"
+                   ng-click="vm.openStartTimeFunc()">
+          </div>
+          <label for="endTime-select" class="col-sm-1 control-label date-label-normal">结束日期：</label>
+          <div class="col-sm-2 input-box date-input-normal">
+            <span class="date-select" ng-click="vm.openEndTimeFunc()"><i class="iconfont icon-calendar"></i></span>
+            <input class="form-control" type="text" name="endTime" id="endTime-select"
+                   uib-datepicker-popup=""
+                   ng-model="vm.endTime"
+                   ng-required="true"
+                   is-open="vm.popupEndTimeOpened"
+                   datepicker-options="vm.dateOptions"
+                   clear-text="清除"
+                   close-text="关闭"
+                   current-text="今天"
+                   alt-input-formats="altInputFormats"
+                   ng-click="vm.openEndTimeFunc()">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-title form-group">
+          <span class="form-header header-line"></span><span class="form-header header-title">签约协议列表</span>
+          <button type="button" class="btn-normal btn-green" if-show-ele="760" ng-click="vm.searchFunc()">查询</button>
+          <button type="button" class="btn-normal btn-blue" ng-click="vm.resetForm()">重置</button>
+          <button type="button" class="btn-normal btn-blue" if-show-ele="762" ng-click="vm.downloadProtocolFunc();">全部导出</button>
+        </div>
+      </div>
+      <div class="form-group min-table table-responsive">
+        <table class="table cloud-ui-table">
+          <thead>
+            <tr>
+              <th class="list-width">客户名称</th>
+              <th class="list-width">客户手机号</th>
+              <th class="list-width">资金账号</th>
+              <th class="list-width">订单编号</th>
+              <th class="list-width">产品类型</th>
+              <th class="list-width">产品名称</th>
+              <th class="list-width">投顾名称</th>
+              <th class="list-width">投顾手机号</th>
+              <th class="list-width">协议类型</th>
+              <th class="list-width">签约日期</th>
+              <th class="list-width operate">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="x in vm.list track by $index">
+              <td class="list-width" title="{{x.customer_name}}">{{x.customer_name}}</td>
+              <td class="list-width" title="{{x.customer_mobile}}">{{x.customer_mobile}}</td>
+              <td class="list-width" title="{{x.busin_account}}">{{x.busin_account}}</td>
+              <td class="list-width" title="{{x.order_id}}">{{x.order_id}}</td>
+              <td class="list-width" title="{{x.product_type | signProtocolProductTypeFilter}}">{{x.product_type | signProtocolProductTypeFilter}}</td>
+              <td class="list-width" title="{{x.product_name}}">{{x.product_name}}</td>
+              <td class="list-width" title="{{x.broker_name}}">{{x.broker_name}}</td>
+              <td class="list-width" title="{{x.broker_mobile}}">{{x.broker_mobile}}</td>
+              <td class="list-width" title="{{x.agreement_type | protocolTypeFilter}}">{{x.agreement_type | protocolTypeFilter}}</td>
+              <td class="list-width" title="{{x.create_time}}">{{x.create_time}}</td>
+              <td class="list-width">
+                <a href="javascript:;" title="查看协议" if-show-ele="761" ng-click="vm.openModalFunc(x.sign_file)">查看协议</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <small class="null-data" ng-if="!vm.list.length">暂无数据</small>
+      </div>
+      <div class="cloud-ui-pagination">
+        <ul
+          uib-pagination
+          ng-model="vm.currentPage"
+          items-per-page="vm.itemPerPage"
+          total-items="vm.totalItems"
+          max-size="5"
+          boundary-links="false"
+          boundary-link-numbers="true"
+          previous-text="上一页"
+          ng-change="vm.pageChangeFunc();"
+          next-text="下一页"
+        ></ul>
+      </div>
+    </form>
+  </div>
+</div>

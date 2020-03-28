@@ -1,0 +1,60 @@
+<div class="module-page">
+  <div class="module-body viewpoint-tag-setting">
+    <form role="form" class="form-base">
+      <div class="form-title form-group">
+        <span class="form-header header-line"></span><span class="form-header header-title">观点标签列表</span>
+        <div class="add-more">
+          <button if-show-ele="391" type="button" class="btn-normal btn-blue" ng-click="vm.addTag();">新增标签</button>
+        </div>
+        <div if-show-ele="390" class="search-item">
+          <div class="input-group input-normal">
+            <input type="text" class="form-control" ng-model="vm.keywords" />
+            <span class="input-group-btn" ng-click="vm.searchTag();">
+              <i class="icon icon-seek"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group min-table table-responsive">
+        <table class="table cloud-ui-table">
+          <thead>
+            <tr>
+              <th class="list-width">序号</th>
+              <th class="list-width">标签名称</th>
+              <th class="list-width">标签说明</th>
+              <th class="list-width">备注</th>
+              <th class="list-width">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="x in vm.dataList">
+              <td ng-cloak class="list-width">{{$index + 1}}</td>
+              <td ng-cloak class="list-width">{{x.viewpoint_tag_name}}</td>
+              <td ng-cloak class="list-width">{{x.viewpoint_tag_instruction}}</td>
+              <td ng-cloak class="list-width">{{x.remark}}</td>
+              <td ng-cloak class="list-width">
+                <a if-show-ele="392" type="button" button-rights="23" title="删除" ng-click="vm.deleteTag(x);">
+                  <span class="icon icon-primary icon-delete bg-red"></span>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <small class="null-data" ng-if="!vm.dataList.length">暂无数据</small>
+        <div class="cloud-ui-pagination">
+          <ul uib-pagination
+            ng-model="vm.currentPage"
+            items-per-page="vm.itemPerPage"
+            total-items="vm.totalItems"
+            max-size="5"
+            boundary-links="false"
+            boundary-link-numbers="true"
+            previous-text="上一页"
+            ng-change="vm.pageChangeFunc();"
+            next-text="下一页">
+          </ul>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,103 @@
+<div class="module-page">
+  <div class="module-body basic-value-setting">
+    <form role="form" class="form-base">
+      <!-- 观点 -->
+      <div class="form-title form-group">
+        <span class="form-header header-line"></span><span class="form-header header-title">观点</span>
+      </div>
+      <!-- 浏览人数设置 -->
+      <div class="form-group content">
+        <label class="line-title">浏览人数设置</label>
+        <div class="form-radio">
+          <input class="radio-input-normal" type="radio" id="vpSurfType1" name="vpSurfType" value="1" ng-model="vm.vpSurfType"/>
+          <label class="radio-label-normal" for="vpSurfType1"></label>
+        </div>
+        <label class="radio-title">固定值</label>
+        <div class="input-item">
+          <div class=" input-normal">
+            <input type="text" class="form-control" placeholder="0-100000" ng-model="vm.vpSurfStatic">
+          </div>
+        </div>
+        <div class="form-radio">
+          <input class="radio-input-normal" type="radio" id="vpSurfType2" name="vpSurfType" value="2" ng-model="vm.vpSurfType"/>
+          <label class="radio-label-normal" for="vpSurfType2"></label>
+        </div>
+        <label class="radio-title">随机值</label>
+        <div class="input-item short line">
+          <div class=" input-normal">
+            <input type="text" class="form-control" placeholder="0-100000" ng-model="vm.vpSurfMin">
+          </div>
+        </div>
+        <div class="input-item short">
+          <div class=" input-normal">
+            <input type="text" class="form-control" placeholder="0-100000" ng-model="vm.vpSurfMax">
+          </div>
+        </div>
+      </div>
+      <!-- 点赞人数设置 -->
+      <div class="form-group content">
+        <label class="line-title">点赞人数设置</label>
+        <div class="form-radio">
+          <input class="radio-input-normal" type="radio" id="vpUpType1" name="vpUpType" value="1" ng-model="vm.vpUpType"/>
+          <label class="radio-label-normal" for="vpUpType1"></label>
+        </div>
+        <label class="radio-title">固定值</label>
+        <div class="input-item">
+          <div class=" input-normal">
+            <input type="text" class="form-control" placeholder="0-100000" ng-model="vm.vpUpStatic">
+          </div>
+        </div>
+        <div class="form-radio">
+          <input class="radio-input-normal" type="radio" id="vpUpType2" name="vpUpType" value="2" ng-model="vm.vpUpType"/>
+          <label class="radio-label-normal" for="vpUpType2"></label>
+        </div>
+        <label class="radio-title">随机值</label>
+        <div class="input-item short line">
+          <div class=" input-normal">
+            <input type="text" class="form-control" placeholder="0-100000" ng-model="vm.vpUpMin">
+          </div>
+        </div>
+        <div class="input-item short">
+          <div class=" input-normal">
+            <input type="text" class="form-control" placeholder="0-100000" ng-model="vm.vpUpMax">
+          </div>
+        </div>
+        <button if-show-ele="525" type="button" class="btn-normal btn-green" ng-click="vm.setBasicValueSetFunc()">确定</button>
+      </div>
+      <!-- 直播 -->
+      <div class="form-title form-group">
+        <span class="form-header header-line"></span><span class="form-header header-title">直播</span>
+      </div>
+      <!-- 直播 -->
+      <div class="form-group content">
+        <label class="line-title">参与人数设置</label>
+        <div class="form-radio">
+          <input class="radio-input-normal" type="radio" id="zbType1" name="zbType" value="1" ng-model="vm.zbType"/>
+          <label class="radio-label-normal" for="zbType1"></label>
+        </div>
+        <label class="radio-title">固定值</label>
+        <div class="input-item">
+          <div class=" input-normal">
+            <input type="text" class="form-control" placeholder="0-100000" ng-model="vm.zbStatic">
+          </div>
+        </div>
+        <div class="form-radio">
+          <input class="radio-input-normal" type="radio" id="zbType2" name="zbType" value="2" ng-model="vm.zbType"/>
+          <label class="radio-label-normal" for="zbType2"></label>
+        </div>
+        <label class="radio-title">随机值</label>
+        <div class="input-item short line">
+          <div class=" input-normal">
+            <input type="text" class="form-control" placeholder="0-100000" ng-model="vm.zbMin">
+          </div>
+        </div>
+        <div class="input-item short">
+          <div class=" input-normal">
+            <input type="text" class="form-control" placeholder="0-100000" ng-model="vm.zbMax">
+          </div>
+        </div>
+        <button if-show-ele="525" type="button" class="btn-normal btn-green" ng-click="vm.setBasicValueSetFunc()">确定</button>
+      </div>
+    </form>
+  </div>
+</div>

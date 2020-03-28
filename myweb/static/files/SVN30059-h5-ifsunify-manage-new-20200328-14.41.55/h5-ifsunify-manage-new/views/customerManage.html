@@ -1,0 +1,192 @@
+<div class="module-page">
+  <div class="module-body customerManage">
+    <div class="tab-change">
+      <button ng-class="{ 'tab-active' : vm.data.current == 1 }" ng-click="vm.actions.setCurrent(1)">正常客户</button>
+      <!-- <button if-show-ele="131" ng-class="{ 'tab-active' : vm.data.current == 2 }" ng-click="vm.actions.setCurrent(2)">限制客户</button> -->
+    </div>
+
+    <!--<div ng-if="vm.data.current == 1">-->
+    <div>
+      <form role="form" class="form-base">
+        <div class="form-title form-group">
+          <span class="form-header header-line"></span><span class="form-header header-title">角色列表</span>
+          <button 
+            if-show-ele="136"
+            type="button" 
+            class="btn-normal btn-red" 
+            ng-click="vm.SendMsg(vm.selectedData)" 
+            ng-if="vm.data.current == 1 && vm.customerList[vm.selectedData].sendmsg_status == 0">禁言</button>
+          <button 
+            if-show-ele="136"
+            type="button" 
+            class="btn-normal btn-green" 
+            ng-click="vm.SendMsg(vm.selectedData)" 
+            ng-if="vm.data.current == 1 && vm.customerList[vm.selectedData].sendmsg_status == 1">解除禁言</button>
+          <button type="button" class="btn-normal btn-green btn-right" ng-click="vm.confirmDown();">导出</button>
+          <div class="search-item" if-show-ele="130">
+            <div class="input-group input-normal">
+              <input type="text" class="form-control" placeholder="手机号/昵称/营业部" ng-model="vm.customerKey" />
+              <span class="input-group-btn" ng-click="vm.customerSearch();">
+                <i class="icon icon-seek"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="table-content row">
+          <div class="table-list col-sm-6">
+            <table class="content-list">
+              <thead>
+                <tr class="table-title">
+                  <th class="list-width list-forty">客户昵称</th>
+                  <!-- <th class="list-width list-thirty">归属</th> -->
+                  <th class="list-width list-thirty">手机号码</th>
+                  <th class="list-arr"></th>
+                </tr>
+              </thead>
+              <tbody class="main-list">
+                <tr class="list" ng-class="{'selected': $index == vm.selectedData}" ng-repeat="x in vm.customerList" id="tr{{ $index }}" ng-click="vm.actions.setDetail($index)">
+                  <td class="list-width list-forty" ng-cloak title="{{ x.alias_name }}">
+                    {{ x.alias_name }}
+                    <span class="disable-msg" ng-if="x.sendmsg_status == 1"><i class="icon icon-jinyan"></i></span>
+                  </td>
+                  <!-- <td class="list-width list-thirty" title="{{ x.business_dept }}">{{ x.business_dept || '暂无' }}</td> -->
+                  <td class="list-width list-thirty" title="{{ x.mobile }}">{{ x.mobile }}</td>
+                  <td class="arr"></td>
+                </tr>
+              </tbody>
+            </table>
+            <small class="null-data" ng-if="!vm.customerList.length>0">暂无数据</small>
+            <div class="cloud-ui-pagination">
+              <ul
+                uib-pagination
+                ng-model="vm.currentPage"
+                items-per-page="vm.itemPerPage"
+                total-items="vm.totalItems"
+                max-size="vm.maxSize"
+                boundary-links="false"
+                boundary-link-numbers="true"
+                previous-text="上一页"
+                ng-change="vm.pageChangeFunc();"
+                next-text="下一页"
+              ></ul>
+            </div>
+          </div>
+          <div class="table-detail col-sm-6">
+            <div class="table-gray"></div>
+            <div class="detail-content">
+              <div class="client-avatar">
+                <img ng-src="{{ vm.avatarImg }}" alt="头像" />
+              </div>
+              <div class="client-intro">
+                <span class="client-name">{{ vm.customerList[vm.selectedData].alias_name }}</span>
+                <span class="client-symbol" ng-if="vm.data.current == 1">正常</span>
+                <span class="client-symbol-limit" ng-if="vm.data.current == 2">限制</span>
+              </div>
+              <div class="client-info row">
+                <!-- <div class="input-item col-sm-6 ownership">
+                  <label class="control-label label-normal">归属：</label>
+                  <span title="{{ (vm.customerList[vm.selectedData].tenant_id | tenantIdToName) || '--' }}">{{ (vm.customerList[vm.selectedData].tenant_id | tenantIdToName) || '' }}</span>
+                </div> -->
+                <div class="input-item col-sm-6 phone">
+                  <label class="control-label label-normal">手机号：</label>
+                  <span>{{ vm.customerList[vm.selectedData].mobile || '' }}</span>
+                </div>
+              </div>
+              <div class="client-list">
+                <h4>绩效情况</h4>
+                <div class="client-content row">
+                  <div class="input-item col-sm-6">
+                    <label class="control-label label-normal">消费总金额/元：</label>
+                    <span>{{ vm.fund }}</span>
+                  </div>
+                  <div class="input-item col-sm-6">
+                    <label class="control-label label-normal">购买数/次：</label>
+                    <span>{{ vm.times }}</span>
+                  </div>
+                  <div class="input-item col-sm-6">
+                    <label class="control-label label-normal">提问/次：</label>
+                    <span>{{ vm.askNum }}</span>
+                  </div>
+                </div>
+                <div class="client-content row">
+                  <div class="input-item col-sm-6">
+                    <label class="control-label label-normal">参与直播/次：</label>
+                    <span>{{ vm.liveNum }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="client-list table-responsive">
+                <h4>订阅历史</h4>
+                <span class="detail-more" ng-click="vm.subscribeMore(vm.selectedData);"><i class="icon icon-add"></i>更多</span>
+                <table class="table cloud-ui-table">
+                  <thead>
+                    <tr>
+                      <th class="list-width">组合名称</th>
+                      <th class="list-width">投顾昵称</th>
+                      <th class="list-width">订阅日期</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="x in vm.subList">
+                      <td class="list-width">{{ x.combiName }}</td>
+                      <td class="list-width">{{ x.adviserName }}</td>
+                      <td class="list-width">{{ x.subTime | formatStrToDate }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="client-list table-responsive">
+                <h4>收藏历史</h4>
+                <span class="detail-more" ng-click="vm.combineMore()"> <i class="icon icon-add"></i>更多</span>
+                <table class="table cloud-ui-table">
+                  <thead>
+                    <tr>
+                      <th class="list-width">组合名称</th>
+                      <th class="list-width">店铺名称</th>
+                      <th class="list-width">关注日期</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="x in vm.combineList">
+                      <td class="list-width">{{x.combi_name}}</td>
+                      <td class="list-width">{{x.broker_name}}</td>
+                      <td class="list-width">{{x.create_date}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="client-list table-responsive">
+                <h4>订单历史</h4>
+                <span class="detail-more" ng-click="vm.orderMore()"> <i class="icon icon-add"></i>更多</span>
+                <table class="table cloud-ui-table">
+                  <thead>
+                    <tr>
+                      <th class="list-width">服务类型</th>
+                      <th class="list-width">服务详情</th>
+                      <th class="list-width">成交金额</th>
+                      <th class="list-width">订单状态</th>
+                      <th class="list-width">订单时间</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="x in vm.orderList">
+                      <td class="list-width">{{x.order_type | formatOrderType}}</td>
+                      <td class="list-width">{{x.order_content}}</td>
+                      <td class="list-width">{{x.order_price}}</td>
+                      <td class="list-width">{{x.order_status | formatOrderStatus}}</td>
+                      <td class="list-width">{{x.order_time | showMainTime}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!-- <div class="client-search">
+                <button if-show-ele="131" type="button" class="btn-normal btn-green" ng-if="vm.data.current == 1" ng-click="vm.customerFrozen(vm.selectedData);">限制</button>
+                <button if-show-ele="134" type="button" class="btn-normal btn-green" ng-if="vm.data.current == 2" ng-click="vm.customerUnFrozen(vm.selectedData);">解除限制</button>
+              </div> -->
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

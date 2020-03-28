@@ -1,0 +1,56 @@
+<div class="module-page">
+  <div class="module-body liveManage">
+    <form role="form" class="form-base">
+      <!-- 人数设置 -->
+      <!-- <div class="setting">
+        <span>直播参与人数起始值设置</span>
+        <div class="input-item">
+          <div class=" input-normal">
+            <input type="text" class="form-control" ng-model="vm.memberNum">
+          </div>
+        </div>
+        <button type="button" class="btn-normal btn-green" if-show-ele="235" ng-click="vm.setMemberFunc();">确定</button>
+      </div> -->
+      <!-- 日历主要表格 -->
+      <div class="account-box">
+        <div class="f-title">
+          <div class="f-title-left" ng-click="vm.prevMonthFunc();"><i class="triangle-leftward"></i></div>
+          <div class="f-title-right" ng-click="vm.nextMonthFunc();"><i class="triangle-rightward"></i></div>
+          <div class="f-title-center"><span class="f-year">{{vm.curYear}}</span>年<span class="f-month">{{vm.curMonth}}</span>月</div>
+        </div>
+        <div class="f-rili-table">
+          <div class="f-rili-head">
+            <div class="f-rili-th">周日</div>
+            <div class="f-rili-th">周一</div>
+            <div class="f-rili-th">周二</div>
+            <div class="f-rili-th">周三</div>
+            <div class="f-rili-th">周四</div>
+            <div class="f-rili-th">周五</div>
+            <div class="f-rili-th">周六</div>
+            <div class="clear"></div>
+          </div>
+          <div class="f-tbody">
+            <div class='f-td f-null' style='color:#ccc;' ng-repeat="pre in vm.lastDateArray">
+              <p class='f-null-date'>{{pre}}</p>
+            </div>
+            <div class='f-td f-number' ng-repeat="day in vm.currentDateArray">
+              <div style="overflow: hidden;">
+                <p class='f-day' ng-click="vm.openDayCourseModalFunc(day.course);">{{day.date}}</p>
+              </div>
+              <div class='course-btn' ng-repeat="course in day.course">
+                <input type='button' class='course-base' value='{{course.name}}' ng-click="vm.openModal(day.course, day.dateAll, course);"/>
+              </div>
+              <div class='course-btn' if-show-ele="232" ng-if="day.course.length <= 20">
+                <input type='button' class='course-empty' value='添加' ng-click="vm.openModal(day.course, day.dateAll);"/>
+              </div>
+            </div>
+            <div class='f-td f-null' style='color:#ccc;' ng-repeat="next in vm.nextDateArray">
+              <p class='f-null-date'>{{next}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="module-footer"></div>
+</div>

@@ -1,0 +1,81 @@
+<div class="module-page">
+  <div class="module-body fansSpeechMonitor">
+    <form role="form" class="form-base">
+      <div class="form-group">
+        <button if-show-ele="180" type="button" class="btn-normal btn-red pull-right" ng-click="vm.blockRemark();">屏蔽</button>
+        <div class="input-item pull-right">
+          <div class=" input-normal" uib-dropdown keyboard-nav>
+            <button id="simple-btn-keyboard-nav" type="button" class="form-control" uib-dropdown-toggle>
+              {{vm.selectedType}}<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+              <li role="menuitem" ng-repeat="item in vm.typeList" ng-click="vm.selectedTypeFunc(item);"><a>{{item}}</a></li>
+            </ul>
+          </div>
+        </div>
+        <div if-show-ele="181" class="search-item pull-right">
+          <div class="input-group input-normal">
+            <input type="text" class="form-control" ng-model="vm.keyword" placeholder="请输入关键字">
+            <span class="input-group-btn" ng-click="vm.keywordSearch();">
+              <i class="icon icon-seek"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+      <table class="table cloud-ui-table">
+        <thead>
+        <tr>
+          <th class="box">
+            <div class="form-checkbox">
+              <input type="checkbox" id="checkbox_all" ng-model="vm.checkAll" ng-click="vm.selectAll();"/>
+              <label for="checkbox_all"></label>
+            </div>
+          </th>
+          <th>主题/名称</th>
+          <th>粉丝言论</th>
+          <th>粉丝昵称</th>
+          <th>发言时间</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="item in vm.dataList">
+          <td>
+            <div class="form-checkbox">
+              <input type="checkbox" id="checkbox_{{$index}}" name="check_item" ng-checked="vm.checkAll" ng-click="vm.selectItem(item);"/>
+              <label for="checkbox_{{$index}}"></label>
+            </div>
+          </td>
+          <td title="{{item.viewpointTitle || item.questionTag || item.topic || item.combinationName || '无主题'}}">{{item.viewpointTitle || item.questionTag || item.topic || item.combinationName || '无主题'}}<i class="icon icon-shield" title="屏蔽" ng-show="item.blockFlag == 1"></i></td>
+          <td>
+            <span class="remark"
+                    uib-popover-html="vm.htmlContent[$index]"
+                    popover-placement="bottom"
+                    popover-trigger="'mouseenter'">
+              <span class="content" ng-bind-html="vm.htmlContent[$index]"></span>
+            </span>
+          </td>
+          <td title="{{item.aliasName || item.customerName || '匿名'}}">{{item.aliasName || item.customerName || '匿名'}}</td>
+          <td>{{item.createTime || item.sendTime || item.replyTime}}</td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="no-data">
+        <i class="icon icon-empty"></i>
+        <p class="no-data" ng-if="vm.dataList.length == 0">暂无数据~</p>
+      </div>
+      <div class="cloud-ui-pagination">
+        <ul uib-pagination
+            ng-model="vm.currentPage"
+            items-per-page="vm.itemsPerPage"
+            total-items="vm.totalItems"
+            max-size="vm.maxSize"
+            boundary-links="false"
+            boundary-link-numbers="true"
+            previous-text="上一页"
+            ng-change="vm.pageChangeFunc();"
+            next-text="下一页">
+        </ul>
+      </div>
+    </form>
+  </div>
+</div>
