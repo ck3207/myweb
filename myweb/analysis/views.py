@@ -11,8 +11,9 @@ from .utilities.download_from_pkg import Download
 from .utilities.replace_config_file import Replace
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
-# Create your views here.
 
+# Create your views here.
+import logging
 
 def homepage(request):
     all_tools = Tools.objects.all()
@@ -80,8 +81,8 @@ def get_pkgs(request):
     # 获取token数据
     light_token_data = ConfigTable.objects.get(section='public', option='light', section_flag=0)
     pkg_token_data = ConfigTable.objects.get(section='public', option='pkg', section_flag=0)
-    light_token = json.loads(light_token_data.value)
-    pkg_token = json.loads(pkg_token_data.value)
+    light_token = json.loads(light_token_data.value.replace("'", '"'))
+    pkg_token = json.loads(pkg_token_data.value.replace("'", '"'))
     light_date_time = light_token_data.date_time
     pkg_date_time = pkg_token_data.date_time
     return render(request, 'light.html', locals())
@@ -95,7 +96,8 @@ def deploy_on_lihgt(request):
     pkg_token = request.POST['pkg_token'].strip()
     file = request.FILES['file']    # 上传的文件
     pkg_full_path = request.POST['path'] # 需要下载的pkg文件全路径
-    print(pkg_token)
+    logging.info('Input pkg_token: {0}'.format(pkg_token))
+    logging.info('Input light_token:{0}'.format(light_token))
     # 获取部署包
     # if both file and path is existed, use file, drop path.
     if file:
@@ -105,9 +107,10 @@ def deploy_on_lihgt(request):
             with open(file_full_path, 'wb') as f:
                 for info in file.chunks():
                     f.write(info)
-            print('Upload File Successfully.')
+            logging.info('Upload File[{0}] Successfully.'.format(file_full_path))
         except Exception as e:
-            print(str(e))
+            logging.info(str(e))
+            logging.info('Upload File[{0}] Failed.'.format(file_full_path))
             return HttpResponse('Upload File Failed.')
     else:
         file_full_path = os.path.join(settings.UPLOAD_OR_DOWNLOAD_FILE_PATH, os.path.basename(pkg_full_path))
@@ -115,6 +118,7 @@ def deploy_on_lihgt(request):
             pkg_token = {"Cookie": pkg_token}
         else:
             pkg_token = json.loads(ConfigTable.objects.get(section='public', option='pkg', section_flag=0).value)
+            logging.info('Get pkg_token from ConfigTable is [{}]'.format(pkg_token))
         # 下载部署包
         download = Download(file_path=pkg_full_path, headers=pkg_token)
         download.download(settings.UPLOAD_OR_DOWNLOAD_FILE_PATH)
@@ -122,18 +126,27 @@ def deploy_on_lihgt(request):
         if os.path.getsize(file_full_path) < 1000:
             return HttpResponse('PKG Token May Be Overdue. Please Reset It.')
         else:
-            # update light token
-            ConfigTable.obejects.get_or_update(section='public', option='light', section_flag=0, value=pkg_token)
+            # update pkg token
+            logging.info("Download file[{0}] successfully.".format(pkg_full_path))
+            ConfigTable.obejects.filter(section='public', option='pkg', section_flag=0).update(value=pkg_token)
+            logging.info('Update pkg token[{0}].'.format(pkg_token))
+            # logging.info(str(pkg_token))
     
     # 解压部署包，替换配置文件， 压缩部署包
     try:
+        logging.info("Trying to replace config file.")
         rep = Replace(file_path=file_full_path, section=section)
         # src_dir=压缩源目录， dest_dir=压缩到哪个目录， file_name=压缩后的文件名
+        logging.debug('Trying to unzip download zip file[{0}].'.format(file_full_path))
         src_dir, dest_dir, file_name = rep.unzip_file()
+        logging.debug("src_dir is {0}, dest_dir is {1}, file_name is {2}".format(src_dir, dest_dir, file_name))
+        logging.info("Trying to replace config file.")
         rep.replace_config(os.path.join(settings.UPLOAD_OR_DOWNLOAD_FILE_PATH, section), src_dir, "config.local.js")
+        logging.info("Trying to zip the directory after replacing config file.")
         new_file_full_path = rep.zip_file(src_dir=src_dir, dest_dir=dest_dir, file_name=file_name)
-        return HttpResponse('Let me see, whether replace config file successful or not.')
+        logging.info('Replaced config file successfully.')
     except:
+        logging.info(('Unzip or Zip file error: {0}'.format(os.path.basename(file_full_path))))
         return HttpResponse('Unzip or Zip file error: {0}'.format(os.path.basename(file_full_path)))
 
     # light 部署
@@ -142,16 +155,22 @@ def deploy_on_lihgt(request):
         light_token = {"Authorization": light_token}
     else:
         light_token = json.loads(ConfigTable.objects.get(section='public', option='light', section_flag=0).value)
+        logging.info('Get light_token from ConfigTable is [{}]'.format(light_token))
     # ids = {app_id: pkg_id}
     ids = json.loads(ConfigTable.objects.get(section=section, option="ids", section_flag=0).value)
+    logging.info("需要部署的APP 信息: {}".format(ids))
     deploy = DeployOnLight(headers=light_token)
     for app_id, pkg_id in ids.items():
         try:
             deploy.deploy(file_path=new_file_full_path, app_id=app_id, pkg_id=pkg_id)
             # update light token
-            ConfigTable.obejects.get_or_update(section='public', option='light', section_flag=0, value=light_token)
+            ConfigTable.objects.filter(section='public', option='light', section_flag=0).update(value=light_token)
+            logging.info('Update light token[{0}].'.format(light_token))
+            # logging.info(str(light_token))
         except Exception as e:
-            print(str(e))
+            logging.info(str(e))
+            logging.info('The Light Token is probably overdue.')
             return HttpResponse('The Light Token is probably overdue.')
         
+    logging.info('Deploy {0} on app {1} Successfully.'.format(file.name, section))
     return HttpResponse('Deploy {0} on app {1} Successfully.'.format(file.name, section))

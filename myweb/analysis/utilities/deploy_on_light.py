@@ -5,6 +5,7 @@ import zipfile
 import requests
 import sys
 import json
+import logging
 
 import configparser
 # from download_flies_from_ftp import FtpOperate
@@ -43,7 +44,7 @@ class DeployOnLight:
     def query_offline_pkglist2(self, url="service/portal/appdiy/offline/query_offline_pkglist"):
         data = {"app_id": "2968"}
         r = requests.get(url=DeployOnLight.BASE_URL + url, headers=self.headers, verify=False, params=data)
-        print(r.json())
+        logging.info(r.json())
 
     def query_offline_versionlist(self, data, url="service/portal/appdiy/offline/query_offline_versionlist"):
         """Response column:
@@ -60,7 +61,7 @@ class DeployOnLight:
                 if version.get("status") == "1":
                     return version
         except Exception as e:
-            print("Error: ", str(e))
+            logging.error("Error: {0}".format(str(e)))
         finally:
             return version
 
@@ -71,7 +72,7 @@ class DeployOnLight:
             for version in result.get("data").get("list"):
                 return version
         except Exception as e:
-            print("Error: ", str(e))
+            logging.error("Error: {0}".format(str(e)))
         finally:
             return version
 
@@ -81,7 +82,7 @@ class DeployOnLight:
         name: pkg name"""
         files = {"file": open(file_path, "rb")}
         result = requests.post(url=DeployOnLight.BASE_URL+url, files=files, headers=self.headers, verify=False)
-        print(result.json())
+        logging.info(result.json())
         return result.json()
 
     def add_offline_version(self, url="service/portal/appdiy/offline/add_offline_version", data={}):
@@ -106,8 +107,8 @@ class DeployOnLight:
         return self.request(url=DeployOnLight.BASE_URL+url, data=data, is_get=False)
 
     def request(self, url, data, is_get=True, verify=False, headers={}):
-        print("Will Reuqeuest Interface: ", url)
-        print("Augues as follows: \n", data)
+        logging.info("Will Reuqeuest Interface: {0}".format(url))
+        logging.info("Augues as follows: \n{0}".format(data))
         if not headers:
             headers = self.headers
         if is_get:
@@ -115,7 +116,7 @@ class DeployOnLight:
         else:
             r = requests.post(url=url, headers=headers, verify=verify, data=data)
         result = r.json()
-        print("Response: \n", result)
+        logging.info("Response: \n{0}".format(result))
         return result
 
     def get_next_version(self, current_version):
@@ -140,7 +141,7 @@ class DeployOnLight:
                 if task.get("status") == '0' or task.get("status") == 0:
                     return task.get("id")
         except Exception as e:
-            print(str(e))
+            logging.error(str(e))
 
     def deploy(self, file_path, app_id, pkg_id):
         pkg_list = self.query_offline_pkglist(data={"app_id": app_id})
@@ -150,99 +151,33 @@ class DeployOnLight:
 
         # 判断 app　是否在部署app列表中
         for component in pkg_list.get("data"):
-            # 中邮账户分析测试环境需要上传安卓跟苹果端，有两个地址，app_id 不会重复，先这么处理
+            # 下述处理逻辑必需为 匹配ID后，进行更新操作，即使代码有问题， 也不会影响其他组件，切记！切记！
             if component.get("id") == int(pkg_id):
+                name = component.get("name")
+                pkg_id = component.get("id")
+                logging.info("H5[{0}], pkg_id [{1}], pkg_id_type [{2}]".format(name, pkg_id, type(pkg_id)))
                 continue
-            name = component.get("name")
-            pkg_id = component.get("id")
-
-            data = {"app_id": app_id, "pkg_id": pkg_id, "page_no": 1, "page_size": 10}
-            deployed_version_dic = self.query_offline_versionlist(data=data)
-            upload_data_dic = self.upload_package(file_path=file_path)
-            deployed_version_info = self.get_current_version_info(data=deployed_version_dic)
-            # deployed_version = deployed_version_info.get("version")
-            deployed_version_id = deployed_version_info.get("id")
-            max_version = self.get_max_version_info(data=deployed_version_dic).get("version")
-            new_version = self.get_next_version(current_version=max_version)
-            android_version_scope = ios_version_scope = "0.0.0.0,9.9.9.9"
-            package_id = upload_data_dic.get("data")
-            add_offline_version_data = {"app_id": app_id, "pkg_id": pkg_id, "version": new_version,
-                                        "android_version_scope": android_version_scope,
-                                        "ios_version_scope": ios_version_scope, "is_wifi": 0,
-                                        "package_id": package_id, "file_name": file_name, "file_size": file_size}
-            offline_version_dic = self.add_offline_version(data=add_offline_version_data)
-            query_offline_task_data = {"app_id": app_id, "version_id": deployed_version_id, "page_no": 1, "page_size": 5}
-            query_offline_task_dic = self.query_offline_task(data=query_offline_task_data)
-            task_id = self.get_task_id(query_offline_task_dic)
-            update_offline_task_data = {"app_id": app_id, "id": task_id, "status": 2}
-            self.update_offline_task(data=update_offline_task_data)
-            new_version_id = offline_version_dic.get("data")
-            add_offline_task_data = {"app_id": app_id, "pkg_id": pkg_id, "version_id": new_version_id,
-                                     "release_type": 0, "update_strategy": 0, "release_desc": "Auto Deployed."}
-            self.add_offline_task(data=add_offline_task_data)
+                data = {"app_id": app_id, "pkg_id": pkg_id, "page_no": 1, "page_size": 10}
+                deployed_version_dic = self.query_offline_versionlist(data=data)
+                upload_data_dic = self.upload_package(file_path=file_path)
+                deployed_version_info = self.get_current_version_info(data=deployed_version_dic)
+                deployed_version_id = deployed_version_info.get("id")
+                max_version = self.get_max_version_info(data=deployed_version_dic).get("version")
+                new_version = self.get_next_version(current_version=max_version)
+                android_version_scope = ios_version_scope = "0.0.0.0,9.9.9.9"
+                package_id = upload_data_dic.get("data")
+                add_offline_version_data = {"app_id": app_id, "pkg_id": pkg_id, "version": new_version,
+                                            "android_version_scope": android_version_scope,
+                                            "ios_version_scope": ios_version_scope, "is_wifi": 0,
+                                            "package_id": package_id, "file_name": file_name, "file_size": file_size}
+                offline_version_dic = self.add_offline_version(data=add_offline_version_data)
+                query_offline_task_data = {"app_id": app_id, "version_id": deployed_version_id, "page_no": 1, "page_size": 5}
+                query_offline_task_dic = self.query_offline_task(data=query_offline_task_data)
+                task_id = self.get_task_id(query_offline_task_dic)
+                update_offline_task_data = {"app_id": app_id, "id": task_id, "status": 2}
+                self.update_offline_task(data=update_offline_task_data)
+                new_version_id = offline_version_dic.get("data")
+                add_offline_task_data = {"app_id": app_id, "pkg_id": pkg_id, "version_id": new_version_id,
+                                         "release_type": 0, "update_strategy": 0, "release_desc": "Auto Deployed."}
+                self.add_offline_task(data=add_offline_task_data)
         return
-
-
-def begin():
-    try:
-        section = sys.argv[1]
-    except:
-        section = "default"
-    conf = configparser.ConfigParser()
-    conf.read(filenames="conf.ini", encoding="utf-8")
-    headers_str = conf.get(section="public", option="headers")
-    headers = json.loads(headers_str)
-    package_version = conf.get(section=section, option="package_version")
-    update_packages = conf.get(section=section, option="update_packages").split(",")
-
-    path = os.path.join(os.getcwd(), "download")
-    __clean_env(path=path)
-    os.mkdir(path)
-    try:
-        ftp_operate = FtpOperate(local_prefix=path)
-        deploy_on_light = DeployOnLight(headers=headers)
-        ftp_obj = ftp_operate.ftp_connect()
-        components = FtpOperate.COMPONENTS
-        for component in components.keys():
-            if component not in update_packages:
-                continue
-            print("Component: ", component)
-            deepth = 0
-            for directory in components.get(component).split("/"):
-                deepth += 1
-                ftp_operate.cd_directory(ftp_obj=ftp_obj, directory=directory)
-            if not component in ["accountanalysis-cnpsec"]:
-                # 小组件统一处理
-                ftp_operate.cd_directory(ftp_obj=ftp_obj, directory=ftp_operate.get_next_dir(ftp_obj=ftp_obj))
-                # ftp_operate.show_directories(ftp_obj)
-                filenames = ftp_operate.get_tar_packages(ftp_obj)
-                for filename in filenames:
-                    if package_version in filename:
-                        ftp_operate.ftp_down(ftp_obj=ftp_obj, file_name=filename)
-                        print("Download Component Zipfile [%s] Successfully. " % component)
-                        # print(os.path.join(ftp_obj.pwd(), filename))
-                        time.sleep(0.5)
-                        zip_file = _unzip(path=path, file=filename) # 解压后，调用压缩方法
-                        deploy_on_light.deploy(zip_file)
-                for i in range(deepth+1):
-                    ftp_obj.cwd("..")
-            else:
-                # 中邮账户分析特殊处理
-                filename = ftp_operate.get_next_dir(ftp_obj)
-                ftp_operate.ftp_down(ftp_obj=ftp_obj, file_name=filename)
-                print("Download Component Zipfile [%s] Successfully. Path is:" % component)
-                # print(os.path.join(ftp_obj.pwd(), filename))
-                time.sleep(0.5)
-                zip_file = _unzip(path=path, file=filename)  # 解压后，调用压缩方法
-                deploy_on_light.deploy(zip_file)
-                for i in range(deepth):
-                    ftp_obj.cwd("..")
-
-        ftp_operate.disconnect(ftp_obj)
-    except UnicodeDecodeError:
-        ftp_operate.disconnect(ftp_obj)
-
-
-if __name__ == "__main__":
-    begin()
-    # print(os.name)

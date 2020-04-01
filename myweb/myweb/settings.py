@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import logging
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -132,3 +133,8 @@ DOWNLOAD_FILE_ROOT = os.path.join(BASE_DIR, 'static/download')
 
 # 部署包目录
 UPLOAD_OR_DOWNLOAD_FILE_PATH = os.path.join(BASE_DIR, 'static/files')
+
+# 日志文件的路径
+LOG_FILE = os.path.join(BASE_DIR, 'django.log')
+# 日志级别
+LOG_LEVEL = logging.INFO
