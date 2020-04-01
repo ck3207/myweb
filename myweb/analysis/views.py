@@ -15,6 +15,7 @@ from django.http import HttpResponse
 # Create your views here.
 import logging
 
+
 def homepage(request):
     all_tools = Tools.objects.all()
     tools_num = len(all_tools)
@@ -60,20 +61,24 @@ def add_host_detail(request):
     except Exception as e:
         return HttpResponse('Insert data failured.Probably data have already existed.')
 
+
 def del_data(request):
     db_info = {'servers': Servers}
     db_name = request.GET['db_name']
     db_info.get(db_name).objects.all().delete()
     return HttpResponse('Del Data Successfully.')
 
+
 @csrf_exempt
 def query_hosts(request):
     host_info = Servers.objects.all()
     return render(request, 'query_hosts.html', locals())
 
+
 def autoDeploy(request):
     datas = Servers.objects.all()
     return render(request, 'autoDeploy.html', locals())
+
 
 def get_pkgs(request):
     config_info = ConfigTable.objects.all()
@@ -86,7 +91,7 @@ def get_pkgs(request):
     light_date_time = light_token_data.date_time
     pkg_date_time = pkg_token_data.date_time
     return render(request, 'light.html', locals())
-    # return HttpResponse('light.html')
+
 
 @csrf_exempt    
 def deploy_on_lihgt(request):

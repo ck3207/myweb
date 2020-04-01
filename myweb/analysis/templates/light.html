@@ -14,22 +14,22 @@ div label {
 <body>
 
 <form name='deploy-on-light' action='deploy-on-light/' method='POST' enctype="multipart/form-data" >
-    <label for='section'><b>选 择 部 署 包</b></label>
+    <label for='section'><b>选 择 部 署 包</b></label><br>
     {% for section in sections %}
         {% if section.section == 'zhongyou-fans' %}
-            <input type='radio' name='section' value={{section.section}} checked>{{section.section}}
+        <input type='radio' name='section' value={{section.section}} checked>{{section.section}}--当前版本:{{section.version}}<br>
         {% else %}
-            <input type='radio' name='section' value={{section.section}} >{{section.section}}
+        <input type='radio' name='section' value={{section.section}} >{{section.section}}--当前版本:{{section.version}}<br>
         {% endif %}
     {% endfor %}
     <br>
     <div id='token'>
         <label for='light_token'><b>light平台token</b></label>
-        <input name='light_token' type='text' value='{{light_token.Authorization}}' ><label>最后更新时间为： {{ligt_date_time}}</label>
+        <input name='light_token' type='text' value='{{light_token.Authorization}}' ><label>最后更新时间为:{{ligt_date_time}}</label>
     </div>
     <div id='token'>
         <label for='pkg_token'><b>pkg平台Cookie</b></label>
-        <input name='pkg_token' type='text' value='{{pkg_token.Cookie}}' ><label>最后更新时间为： {{pkg_date_time}}</label>
+        <input name='pkg_token' type='text' value='{{pkg_token.Cookie}}' ><label>最后更新时间为:{{pkg_date_time}}</label>
     </div>
     <label for='file'><b>文 件 上 传</b></label>
     <input type='file' name='file' ><br>
