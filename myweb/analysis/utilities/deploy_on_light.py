@@ -6,7 +6,6 @@ import requests
 import sys
 import json
 import logging
-
 import configparser
 # from download_flies_from_ftp import FtpOperate
 # from download_files_from_pkg import PKG
@@ -61,7 +60,7 @@ class DeployOnLight:
                 if version.get("status") == "1":
                     return version
         except Exception as e:
-            logging.error("Error: {0}".format(str(e)))
+            logging.info("Error: {}".format(str(e)))
         finally:
             return version
 
@@ -72,7 +71,7 @@ class DeployOnLight:
             for version in result.get("data").get("list"):
                 return version
         except Exception as e:
-            logging.error("Error: {0}".format(str(e)))
+            logging.info("Error: {}".format(str(e)))
         finally:
             return version
 
@@ -107,8 +106,8 @@ class DeployOnLight:
         return self.request(url=DeployOnLight.BASE_URL+url, data=data, is_get=False)
 
     def request(self, url, data, is_get=True, verify=False, headers={}):
-        logging.info("Will Reuqeuest Interface: {0}".format(url))
-        logging.info("Augues as follows: \n{0}".format(data))
+        logging.info("Will Reuqeuest Interface: {}".format(url))
+        logging.info("Augues as follows: \n{}".format(data))
         if not headers:
             headers = self.headers
         if is_get:
@@ -116,7 +115,7 @@ class DeployOnLight:
         else:
             r = requests.post(url=url, headers=headers, verify=verify, data=data)
         result = r.json()
-        logging.info("Response: \n{0}".format(result))
+        logging.info("Response: \n{}".format(result))
         return result
 
     def get_next_version(self, current_version):
@@ -141,7 +140,7 @@ class DeployOnLight:
                 if task.get("status") == '0' or task.get("status") == 0:
                     return task.get("id")
         except Exception as e:
-            logging.error(str(e))
+            logging.info(str(e))
 
     def deploy(self, file_path, app_id, pkg_id):
         pkg_list = self.query_offline_pkglist(data={"app_id": app_id})
@@ -151,12 +150,11 @@ class DeployOnLight:
 
         # 判断 app　是否在部署app列表中
         for component in pkg_list.get("data"):
-            # 下述处理逻辑必需为 匹配ID后，进行更新操作，即使代码有问题， 也不会影响其他组件，切记！切记！
+            # 若ID 匹配则处理， 否则不能进行任何操作， 万一操作， 可能会导致其他H5 异常；
             if component.get("id") == int(pkg_id):
                 name = component.get("name")
                 pkg_id = component.get("id")
-                logging.info("H5[{0}], pkg_id [{1}], pkg_id_type [{2}]".format(name, pkg_id, type(pkg_id)))
-                continue
+                logging.info("H5[{0}], pkg_id [{1}]".format(name, pkg_id))
                 data = {"app_id": app_id, "pkg_id": pkg_id, "page_no": 1, "page_size": 10}
                 deployed_version_dic = self.query_offline_versionlist(data=data)
                 upload_data_dic = self.upload_package(file_path=file_path)
@@ -181,3 +179,4 @@ class DeployOnLight:
                                          "release_type": 0, "update_strategy": 0, "release_desc": "Auto Deployed."}
                 self.add_offline_task(data=add_offline_task_data)
         return
+

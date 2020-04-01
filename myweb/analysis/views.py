@@ -105,7 +105,7 @@ def deploy_on_lihgt(request):
         try:
             file_full_path = os.path.join(settings.UPLOAD_OR_DOWNLOAD_FILE_PATH, file.name)
             with open(file_full_path, 'wb') as f:
-                for info in file.chunks():
+                for info in file.chunks(chunk_size=1024):
                     f.write(info)
             logging.info('Upload File[{0}] Successfully.'.format(file_full_path))
         except Exception as e:
