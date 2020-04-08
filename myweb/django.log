@@ -365,4 +365,8 @@ Wed, 01 Apr 2020 21:01:23 deploy_on_light.py[line:118] INFO Response:
 {'data': 9701, 'err_no': 0}
 Wed, 01 Apr 2020 21:01:23 views.py[line:168] INFO Update light token[{'Authorization': 'Light 299bd6b073c211ea8383392c9629c3d3'}].
 Wed, 01 Apr 2020 21:01:23 views.py[line:175] INFO Deploy SVN30137-h5-fans-cnpsec-20200331-13.51.42-offline-replaced.zip on app zhongyou-fans Successfully.
+<<<<<<< HEAD
 Wed, 08 Apr 2020 19:36:57 log.py[line:228] WARNING Not Found: /favicon.ico
+=======
+Wed, 01 Apr 2020 23:11:37 log.py[line:228] WARNING Not Found: /favicon.ico
+>>>>>>> 15fbcad85fe2cf63f521fd8d00e11b5d4b53f6d6
