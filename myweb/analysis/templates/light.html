@@ -13,6 +13,35 @@ div label {
 </style>
 <body>
 
+<!-- light部署 -->
+<form name='deploy-on-light' action='deploy-on-light/' method='POST' enctype="multipart/form-data" >
+    <label for='section'><b>选 择 部 署 包</b></label>
+    {% for section in sections %}
+        {% if section.section == 'zhongyou-fans' %}
+            <input type='radio' name='section' value={{section.section}} checked>{{section.section}}
+        {% else %}
+            <input type='radio' name='section' value={{section.section}} >{{section.section}}
+        {% endif %}
+    {% endfor %}
+    <br>
+    <div id='token'>
+        <label for='light_token'><b>light平台token</b></label>
+        <input name='light_token' type='text' value='{{light_token.Authorization}}' ><label>最后更新时间为： {{ligt_date_time}}</label>
+    </div>
+    <div id='token'>
+        <label for='pkg_token'><b>pkg平台Cookie</b></label>
+        <input name='pkg_token' type='text' value='{{pkg_token.Cookie}}' ><label>最后更新时间为： {{pkg_date_time}}</label>
+    </div>
+    <label for='file'><b>文 件 上 传</b></label>
+    <input type='file' name='file' ><br>
+    <label for='path'><b>取 包 路 径</b></label>
+    <input type='text' name='path' value='请输入TS单内取包路径'><br>
+    <label>注意：文件上传与取包路径只需填写一个即可，若两个都填写，取文件上传包。</label><br>
+    <input type='submit' value='部署'>
+</form>
+<hr>
+
+<!-- 小组件H5部署 -->
 <form name='deploy-on-light' action='deploy-on-light/' method='POST' enctype="multipart/form-data" >
     <label for='section'><b>选 择 部 署 包</b></label>
     {% for section in sections %}

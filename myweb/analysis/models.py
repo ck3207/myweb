@@ -61,4 +61,14 @@ class ConfigTable(models.Model):
     value = models.CharField(max_length=512, default='')
     section_flag = models.BooleanField(default=0)
     date_time = models.DateTimeField(auto_now=True)
+    
+    
+class SmallTools(models.Model):
+    """ 小组件表，记录小组件部署服务器、以及部署路径，升级脚本等信息 """
+    id = models.IntegerField(primary_key=True, auto_created=True)
+    name = models.CharField(max_length=32, default='')
+    host = models.CharField(max_length=32, default='')
+    script = models.CharField(max_length=32, default='')
+    command = models.CharField(max_length=256, default='')
+    
 

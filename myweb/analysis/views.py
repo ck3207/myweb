@@ -1,5 +1,6 @@
 import json
 import os
+import time
 
 from django.shortcuts import render, redirect
 from django.conf import settings
@@ -98,6 +99,7 @@ def deploy_on_lihgt(request):
     pkg_full_path = request.POST['path'] # 需要下载的pkg文件全路径
     logging.info('Input pkg_token: {0}'.format(pkg_token))
     logging.info('Input light_token:{0}'.format(light_token))
+    current_time=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
     # 获取部署包
     # if both file and path is existed, use file, drop path.
     if file:
@@ -128,7 +130,7 @@ def deploy_on_lihgt(request):
         else:
             # update pkg token
             logging.info("Download file[{0}] successfully.".format(pkg_full_path))
-            ConfigTable.obejects.filter(section='public', option='pkg', section_flag=0).update(value=pkg_token)
+            ConfigTable.obejects.filter(section='public', option='pkg', section_flag=0).update(value=pkg_token, date_time=current_time)
             logging.info('Update pkg token[{0}].'.format(pkg_token))
             # logging.info(str(pkg_token))
     
@@ -164,7 +166,7 @@ def deploy_on_lihgt(request):
         try:
             deploy.deploy(file_path=new_file_full_path, app_id=app_id, pkg_id=pkg_id)
             # update light token
-            ConfigTable.objects.filter(section='public', option='light', section_flag=0).update(value=light_token)
+            ConfigTable.objects.filter(section='public', option='light', section_flag=0).update(value=light_token, date_time=current_time)
             logging.info('Update light token[{0}].'.format(light_token))
             # logging.info(str(light_token))
         except Exception as e:
