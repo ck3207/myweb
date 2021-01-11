@@ -130,8 +130,8 @@ def test():
         print(each.option, each.value)
     
 if __name__ == "__main__":
-    # os.environ.update({"DJANGO_SETTINGS_MODULE": "config.settings"})
+    os.environ.update({"DJANGO_SETTINGS_MODULE": "config.settings"})
     # load_data_to_sqlite_of_labels()
     # load_data_to_sqlite_of_tools()
-    load_data_to_sqlite_of_config()
+    # load_data_to_sqlite_of_config()
     # test()

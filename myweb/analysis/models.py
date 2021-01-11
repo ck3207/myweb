@@ -1,4 +1,6 @@
 from django.db import models
+import django.utils.timezone as timezone
+
 # Create your models here.
 
 
@@ -36,6 +38,36 @@ class Tools(models.Model):
     def __unicode__(self):
         return self.name
 
+
+class Urls(models.Model):
+    """测试工具数据库"""
+    id = models.IntegerField(default='', verbose_name="url的id", primary_key=True)
+    name = models.CharField(max_length=16, default='', verbose_name="url的名字")
+    summary = models.CharField(max_length=512, default='', verbose_name="url的功能简介")
+    url = models.CharField(max_length=64, default='', verbose_name="url地址")
+    parent_url_id = models.IntegerField(default=0, verbose_name="上一级url的id")
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        # 表备注
+        verbose_name = "url信息表"
+
+class FileTransfer(models.Model):
+    """测试工具数据库"""
+    # id = models.IntegerField(default='', verbose_name="url的id", primary_key=True)
+    name = models.CharField(max_length=256, default='', verbose_name="文件的URL")
+    type = models.IntegerField(default=0, verbose_name="1:上传， 2:下载")
+    remark = models.CharField(max_length=512, default='', verbose_name="备注")
+    create_time = models.DateTimeField(default=timezone.now, auto_created=True, verbose_name="创建时间")
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        # 表备注
+        verbose_name = "文件传输表"
 
 class Servers(models.Model):
     """服务器信息数据库"""

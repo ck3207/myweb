@@ -4,7 +4,7 @@ import time
 
 from django.shortcuts import render, redirect
 from django.conf import settings
-from .models import LableNum, LableDetail, Tools, Servers, ConfigTable
+from .models import LableNum, LableDetail, Tools, Servers, ConfigTable, Urls, FileTransfer
 # from .orthogonalArray.config import Config as c
 from .conf.config import ConfigInfo
 from .utilities.deploy_on_light import DeployOnLight
@@ -59,6 +59,30 @@ def add_host_detail(request):
         Servers.objects.create(address=address, port=port, user=user, password=password)
         return redirect("addHost/query_hosts.html")
         # return HttpResponse("Insert data successfully.")
+    except Exception as e:
+        return HttpResponse('Insert data failured.Probably data have already existed.')
+
+@csrf_exempt
+def upload(request):
+    """Add host data commit."""
+    file = request.FILES['upload']
+    if file:
+    # deal with upload file.
+        try:
+            file_full_path = os.path.join(settings.UPLOAD_OR_DOWNLOAD_FILE_PATH, file.name)
+            with open(file_full_path, 'wb') as f:
+                for info in file.chunks(chunk_size=1024):
+                    f.write(info)
+            logging.info('Upload File[{0}] Successfully.'.format(file_full_path))
+
+        except Exception as e:
+            logging.info(str(e))
+            logging.info('Upload File[{0}] Failed.'.format(file_full_path))
+            return HttpResponse('Upload File Failed.')
+    try:
+        FileTransfer.objects.create(name=file_full_path, type=1, remark='上传文件：{}'.format(file_full_path))
+        # return redirect("addHost/query_hosts.html")
+        return HttpResponse("Insert data successfully.")
     except Exception as e:
         return HttpResponse('Insert data failured.Probably data have already existed.')
 
